@@ -17,7 +17,7 @@ class CategoryController extends Controller
     }
     public function index(Request $request)
     {
-        $perPage = 3;
+        $perPage = 10;
         $conditions = [
             'name' => $request->name
         ];

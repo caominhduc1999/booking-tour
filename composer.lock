@@ -4,8 +4,76 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c61ff82cbf0142a401a48a8161e1595a",
+    "content-hash": "69ae1a4682ced319fb91187bd99d79a4",
     "packages": [
+        {
+            "name": "andrechalom/laravel-multiselect",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andrechalom/laravel-multiselect.git",
+                "reference": "2c80993fb955a9f5027bc7be06a0764cefe37263"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andrechalom/laravel-multiselect/zipball/2c80993fb955a9f5027bc7be06a0764cefe37263",
+                "reference": "2c80993fb955a9f5027bc7be06a0764cefe37263",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": ">=5.1 <9.0",
+                "illuminate/support": ">=5.1 <9.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.2",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "AndreChalom\\LaravelMultiselect\\MultiselectServiceProvider"
+                    ],
+                    "aliases": {
+                        "Multiselect": "AndreChalom\\LaravelMultiselect\\MultiselectFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AndreChalom\\LaravelMultiselect\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Andre Chalom",
+                    "email": "andrechalom@gmail.com",
+                    "homepage": "https://github.com/andrechalom",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A small package for creating html select elements with multiple selections",
+            "homepage": "https://github.com/andrechalom/laravel-multiselect",
+            "keywords": [
+                "form",
+                "laravel",
+                "multiple",
+                "select"
+            ],
+            "support": {
+                "issues": "https://github.com/andrechalom/laravel-multiselect/issues",
+                "source": "https://github.com/andrechalom/laravel-multiselect/tree/v0.2.0"
+            },
+            "time": "2021-10-12T22:53:58+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",
@@ -7489,5 +7557,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.2.0"
 }

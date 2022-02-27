@@ -7,7 +7,14 @@ use Illuminate\Support\ServiceProvider;
 class RepositoryServiceProvider extends ServiceProvider
 {
     private $models = [
-        'Category'
+        'Category',
+        'Tag',
+        'Article',
+        'Tour',
+        'TourGuide',
+        'Hotel',
+        'User',
+        'Discount'
     ];
     
     /**

@@ -43,7 +43,7 @@
                             <form action="">
                                 <div class="row">
                                     <div class="col-6">
-                                        <input type="text" name="name" class="form-control" placeholder="Tên danh mục">
+                                        <input type="text" name="name" class="form-control" placeholder="Tên danh mục" value="{{ request()->name }}">
                                     </div>
                                     <div class="col-md-2">
                                         <button class="btn btn-primary">
@@ -148,7 +148,19 @@
                 "autoWidth": false,
                 "bPaginate": false,
                 "bFilter": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": [
+                    "copy",
+                    "csv", 
+                    "excel", 
+                    "pdf", 
+                    { extend: 'print', text: 'In ấn' },
+                    { extend: 'colvis', text: 'Hiển thị cột' }
+                ],
+                "language": {
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị _START_ tới _END_ của _TOTAL_ dữ liệu",
+                    "infoEmpty": "Hiển thị 0 tới 0 của 0 dữ liệu",
+                }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>

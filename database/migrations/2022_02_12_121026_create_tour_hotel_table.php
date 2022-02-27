@@ -13,7 +13,7 @@ class CreateTourHotelTable extends Migration
      */
     public function up()
     {
-        Schema::create('tour_hotel', function (Blueprint $table) {
+        Schema::create('hotel_tour', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('tour_id')->nullable();
             $table->unsignedInteger('hotel_id')->nullable();
@@ -28,6 +28,6 @@ class CreateTourHotelTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tour_hotel');
+        Schema::dropIfExists('hotel_tour');
     }
 }

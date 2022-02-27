@@ -15,7 +15,7 @@ class CategoryRepository extends RepositoryAbstract implements CategoryRepositor
     public function paginate($perPage, $conditions)
     {
         return $this->model
-            ->when($conditions['name'], function ($q) use ($conditions) {
+            ->when(isset($conditions['name']), function ($q) use ($conditions) {
                 $q->where('name', 'like', '%' . $conditions['name'] . '%');
             })
             ->paginate($perPage);
