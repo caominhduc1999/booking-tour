@@ -20,8 +20,10 @@ class DiscountController extends Controller
         $perPage = 10;
         $conditions = [
             'code' => $request->code,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'start_date_from' => $request->start_date_from,
+            'start_date_to' => $request->start_date_to,
+            'end_date_from' => $request->end_date_from,
+            'end_date_to' => $request->end_date_to,
             'remain_number_from' => $request->remain_number_from,
             'remain_number_to' => $request->remain_number_to,
             'discount_rate_from' => $request->discount_rate_from,

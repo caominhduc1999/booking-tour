@@ -1,0 +1,1 @@
+<a href="{{ $resetPasswordLink }}">{{ $resetPasswordLink }}</a>

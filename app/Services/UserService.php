@@ -68,4 +68,9 @@ class UserService {
             return false;
         }     
     } 
+
+    public function findByField($field, $value)
+    {
+        return $this->userRepository->findByField($field, $value);
+    }
 }

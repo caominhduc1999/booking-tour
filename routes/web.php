@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\HotelController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostTasksController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TourGuideController;
@@ -26,10 +29,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('/', function () {
-        return view('admin.pages.index');
-    });
+Route::get('/admin/login', [LoginController::class, 'getLogin'])->name('get_login');
+Route::post('/admin/login', [LoginController::class, 'postLogin'])->name('post_login');
+Route::get('/admin/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/admin/forgot-password', [LoginController::class, 'getForgotPassword'])->name('get_forgot_password');
+Route::post('/admin/forgot-password', [LoginController::class, 'postForgotPassword'])->name('post_forgot_password');
+Route::get('/admin/reset-password', [LoginController::class, 'getResetPassword'])->name('get_reset_password');
+Route::post('/admin/reset-password/{email}', [LoginController::class, 'postResetPassword'])->name('post_reset_password');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'admin_middleware'], function () {
+    Route::get('/', [AdminController::class, 'index']);
     
     Route::resource('/categories', CategoryController::class);
     Route::resource('/tags', TagController::class);
@@ -39,6 +49,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('/hotels', HotelController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/discounts', DiscountController::class);
+    Route::resource('/bookings', BookingController::class);
 });
 
 Route::post('/upload', [PostTasksController::class, 'upload']);
