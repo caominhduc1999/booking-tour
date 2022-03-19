@@ -68,6 +68,19 @@ class BookingService {
     public function update($id, $data) 
     {
         try {
+            $tour = $this->tourRepository->find($data['tour_id']);
+            $adultPrice = $tour->adult_price * $data['adult_number'];
+            $childrenPrice = $tour->children_price * $data['children_number'];
+            $babyPrice = $tour->baby_price * $data['baby_number'];
+
+            $data['total_price'] = $adultPrice + $childrenPrice + $babyPrice;
+            if ($data['discount_id']) {
+                
+                $discount = $this->discountRepository->find($data['discount_id']);
+                if ($discount) {
+                    $data['total_price'] = $data['total_price'] * (1 - $discount->discount_rate);
+                }
+            }
             $this->bookingRepository->update($id, $data);
 
             return true;
@@ -91,4 +104,19 @@ class BookingService {
             return false;
         }     
     } 
+
+    public function getRevenue($date)
+    {
+        return $this->bookingRepository->getRevenue($date);
+    }
+
+    public function getNewBookings()
+    {
+        return $this->bookingRepository->getNewBookings();
+    }
+
+    public function getTourCount($date)
+    {
+        return $this->bookingRepository->getTourCount($date);
+    }
 }

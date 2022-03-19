@@ -19,6 +19,11 @@ class ArticleService {
         return $this->articleRepository->paginate($perPage, $conditions);
     }
 
+    public function getAll()
+    {
+        return $this->articleRepository->all();
+    }
+
     public function find($id)
     {
         return $this->articleRepository->findOrFail($id);

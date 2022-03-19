@@ -2,8 +2,6 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="/admin" class="brand-link">
-          <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-              style="opacity: .8">
           <span class="brand-text font-weight-light">AdminLTE 3</span>
       </a>
 
@@ -12,10 +10,10 @@
           <!-- Sidebar user (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
               <div class="image">
-                  <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                  <img src="https://media.istockphoto.com/vectors/user-avatar-profile-icon-black-vector-illustration-vector-id1209654046?k=20&m=1209654046&s=612x612&w=0&h=Atw7VdjWG8KgyST8AXXJdmBkzn0lvgqyWod9vTb2XoE=" class="img-circle elevation-2" alt="User Image">
               </div>
               <div class="info">
-                  <a href="#" class="d-block">Alexander Pierce</a>
+                  <a href="#" class="d-block">{{ \Auth::user()->name }}</a>
               </div>
           </div>
 
@@ -109,6 +107,14 @@
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Tour
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/bookings" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                           Đặt Tour
                         </p>
                     </a>
                 </li>

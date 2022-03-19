@@ -32,10 +32,10 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tour</label>
-                            <select class="form-control" name="tour_id" id="">
+                            <select class="form-control" name="tour_id" id="tour-selection">
                                 <option value=""></option>
                                 @foreach($tours as $tour)
-                                    <option value="{{ $tour->id }}" @if(old('tour_id') == $tour->id) selected @endif>{{ $tour->name }}</option>
+                                    <option value="{{ $tour->id }}" @if(old('tour_id') == $tour->id) selected @endif data-value="{{ $tour }}">{{ $tour->name }}</option>
                                 @endforeach
                             </select>
                             @error('tour_id')
@@ -105,7 +105,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng người lớn</label>
-                            <input type="number" class="form-control" name="adult_number" id="exampleInputEmail1" placeholder="Số lượng người lớn" value="{{ old('adult_number') }}">
+                            <input type="number" class="form-control price" name="adult_number" id="exampleInputEmail1" placeholder="Số lượng người lớn" value="{{ old('adult_number', 0) }}">
                             @error('adult_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -114,7 +114,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng trẻ em</label>
-                            <input type="number" class="form-control" name="children_number" id="exampleInputEmail1" placeholder="Số lượng trẻ em" value="{{ old('children_number') }}">
+                            <input type="number" class="form-control price" name="children_number" id="exampleInputEmail1" placeholder="Số lượng trẻ em" value="{{ old('children_number', 0) }}">
                             @error('children_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -123,7 +123,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng trẻ sơ sinh</label>
-                            <input type="number" class="form-control" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number') }}">
+                            <input type="number" class="form-control price" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number', 0) }}">
                             @error('baby_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -131,11 +131,15 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Tổng tiền (không áp dụng mã giảm giá)</label>
+                            <input type="number" class="form-control total-price" id="exampleInputEmail1" placeholder="0" value="" disabled>
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Mã giảm giá</label>
-                            <select class="form-control" name="discount_id" id="">
+                            <select class="form-control" name="discount_id" id="discount-selection">
                                 <option value=""></option>
                                 @foreach($discounts as $discount)
-                                    <option value="{{ $discount->id }}" @if(old('discount_id') == $discount->id) selected @endif>{{ $discount->code }}</option>
+                                    <option value="{{ $discount->id }}" @if(old('discount_id') == $discount->id) selected @endif data-value="{{ $discount }}">{{ $discount->code }}</option>
                                 @endforeach
                             </select>
                             @error('discount_id')
@@ -143,6 +147,10 @@
                                     {{ $message }}
                                 </div>    
                             @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tổng tiền (sau khi áp dụng mã giảm giá)</label>
+                            <input type="number" class="form-control total-price-after-discount" id="exampleInputEmail1" placeholder="0" value="" disabled>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Ghi chú</label>
@@ -170,7 +178,8 @@
                             <label for="exampleInputEmail1">Trạng thái thanh toán</label>
                             <select class="form-control" name="payment_status" id="">
                                 <option value="1">Chưa thanh toán</option>
-                                <option value="2">Đã thanh toán</option>
+                                <option value="2">Đã đặt cọc</option>
+                                <option value="3">Đã thanh toán</option>
                             </select>
                             @error('payment_status')
                                 <div class="text-danger">
@@ -231,6 +240,51 @@
                     $('#booking_person_address').prop('readonly', false);
                 }
             })
+
+            $("#tour-selection").change(function () {
+                var optionSelected = $("option:selected", this);
+                
+                var tourData = optionSelected[0].dataset.value != undefined ? JSON.parse(optionSelected[0].dataset.value) : null;
+                calculateTotalPrice(tourData)
+                calculateTotalPriceAfterDiscount()
+            })
+
+            $('.price').change(function() {
+                let selectedTour = $("#tour-selection :selected")
+                let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
+                calculateTotalPrice(tourData)
+                calculateTotalPriceAfterDiscount()
+            })
+
+            function calculateTotalPrice(data) {
+                let adultPrice = data.adult_price
+                let childrenPrice = data.children_price
+                let babyPrice = data.baby_price
+
+                let adultNumber = $('input[name="adult_number"]').val()
+                let childrenNumber = $('input[name="children_number"]').val()
+                let babyNumber = $('input[name="baby_number"]').val()
+
+                let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
+                $('.total-price').val(totalPrice)
+            }
+
+            $("#discount-selection").change(function () {
+                calculateTotalPriceAfterDiscount()
+            })
+
+            function calculateTotalPriceAfterDiscount() {
+                let selectedDiscount = $("#discount-selection :selected")
+                let discountData = selectedDiscount[0].dataset.value != undefined ? JSON.parse(selectedDiscount[0].dataset.value) : null
+                if (discountData != null) {
+                    let discountRate = discountData.discount_rate
+                    let totalPriceAfterDiscount = $('.total-price').val() * (1 - discountRate)
+                    $('.total-price-after-discount').val(totalPriceAfterDiscount)
+                } else {
+                    let totalPriceAfterDiscount = $('.total-price').val()
+                    $('.total-price-after-discount').val(totalPriceAfterDiscount)
+                }
+            }
         })
     </script>
 @endsection

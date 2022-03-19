@@ -4,6 +4,7 @@ namespace App\Repositories\Tour;
 
 use App\Models\Tour;
 use App\Repositories\RepositoryAbstract;
+use Illuminate\Support\Carbon;
 
 class TourRepository extends RepositoryAbstract implements TourRepositoryInterface
 {
