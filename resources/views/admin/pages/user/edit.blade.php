@@ -59,6 +59,18 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Giới tính</label>
+                            <select class="form-control" name="gender" id="">
+                                <option value="1" @if(old('gender') ? old('gender') == 1 : $user->gender == 1) selected @endif>Nam</option>
+                                <option value="2" @if(old('gender') ? old('gender') == 2 : $user->gender == 2) selected @endif>Nữ</option>
+                            </select>
+                            @error('gender')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Vai trò</label>
                             <select class="form-control" name="role" id="">
                                 <option value="1" @if(old('role') ? old('role') == 1 : $user->role == 1) selected @endif>Admin</option>

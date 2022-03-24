@@ -46,6 +46,20 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Khách sạn</label>
+                            <select class="form-control" name="hotel_id">
+                                <option value=""></option>
+                                @foreach($hotels as $hotel)
+                                    <option value="{{ $hotel->id }}" @if(old('hotel_id') ? old('hotel_id') == $hotel->id : $booking->hotel_id == $hotel->id) selected @endif >{{ $hotel->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('hotel_id')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Tên người đặt</label>
                             <input type="text" class="form-control" name="booking_person_name" id="booking_person_name" readonly placeholder="Tên người đặt" value="{{ old('booking_person_name', $booking->booking_person_name) }}">
                             @error('booking_person_name')
@@ -112,6 +126,15 @@
                             <label for="exampleInputEmail1">Số lượng trẻ sơ sinh</label>
                             <input type="number" class="form-control price" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number', $booking->baby_number) }}">
                             @error('baby_number')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tiền đặt cọc tối thiểu</label>
+                            <input type="number" class="form-control" name="deposit" id="exampleInputEmail1" placeholder="Tiền đặt cọc tối thiểu" value="{{ old('deposit', $booking->deposit) }}">
+                            @error('deposit')
                                 <div class="text-danger">
                                     {{ $message }}
                                 </div>    

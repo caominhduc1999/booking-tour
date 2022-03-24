@@ -42,10 +42,56 @@
                             <br>
                             <form action="">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <input type="text" name="name" class="form-control" placeholder="Tên danh mục" value="{{ request()->name }}">
+                                    <div class="col-md-4">
+                                        <input type="text" name="booking_person_name" class="form-control" placeholder="Tên người đặt" value="{{ request()->booking_person_name }}">
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
+                                        <input type="text" name="booking_person_phone" class="form-control" placeholder="SĐT người đặt" value="{{ request()->booking_person_phone }}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" name="booking_person_email" class="form-control" placeholder="Email người đặt" value="{{ request()->booking_person_email }}">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select class="form-control" name="tour_id" id="">
+                                            <option value="">Chọn tour</option>
+                                            @foreach($tours as $tour)
+                                                <option value="{{ $tour->id }}" @if(request()->tour_id == $tour->id) selected @endif>{{ $tour->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 d-flex">
+                                        <span>Ngày đặt:</span>
+                                        <input type="date" name="booking_date" class="form-control" placeholder="Ngày đặt" value="{{ request()->booking_date }}">
+                                    </div>
+                                    <div class="col-md-4 d-flex">
+                                        <span>Ngày khởi hành:</span>
+                                        <input type="date" name="start_date" class="form-control" placeholder="Ngày khởi hành" value="{{ request()->start_date }}">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select class="form-control" name="status" id="">
+                                            <option value="">Trạng thái</option>
+                                            <option value="1" @if(request()->status == 1) selected @endif>Chờ xác nhận</option>
+                                            <option value="2" @if(request()->status == 2) selected @endif>Đã xác nhận</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-control" name="payment_status" id="">
+                                            <option value="">Trạng thái thanh toán</option>
+                                            <option value="1" @if(request()->payment_status == 1) selected @endif>Chưa thanh toán</option>
+                                            <option value="2" @if(request()->payment_status == 2) selected @endif>Đã đặt cọc</option>
+                                            <option value="3" @if(request()->payment_status == 3) selected @endif>Đã thanh toán</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>
+                                    <div class="row d-flex justify-content-end">
                                         <button class="btn btn-primary">
                                             Tìm kiếm
                                         </button>
@@ -113,9 +159,9 @@
                                                     <tr class="{{ $key % 2 == 0 ? 'odd' : 'even' }}">
                                                         <td class="dtr-control sorting_1" tabindex="0">{{ $booking->id }}
                                                         </td>
+                                                        <td>{{ $booking->tour->name }}</td>
                                                         <td>{{ $booking->booking_person_name }}</td>
                                                         <td>{{ $booking->booking_person_phone }}</td>
-                                                        <td>{{ $booking->booking_date }}</td>
                                                         <td>{{ $booking->booking_date }}</td>
                                                         <td>{{ $booking->start_date }}</td>
                                                         <td>{{ $booking->status == 1 ? 'Chờ xác nhận' : 'Đã xác nhận' }}</td>

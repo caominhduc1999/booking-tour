@@ -13,6 +13,7 @@ class Booking extends Model
         'id',
         'user_id',
         'tour_id',
+        'hotel_id',
         'booking_person_phone',
         'booking_person_name',
         'booking_person_email',
@@ -29,4 +30,9 @@ class Booking extends Model
         'payment',
         'payment_status'
     ];
+
+    public function tour()
+    {
+        return $this->belongsTo(Tour::class);
+    }
 }

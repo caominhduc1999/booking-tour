@@ -45,6 +45,20 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Khách sạn</label>
+                            <select class="form-control" name="hotel_id">
+                                <option value=""></option>
+                                @foreach($hotels as $hotel)
+                                    <option value="{{ $hotel->id }}" @if(old('hotel_id') == $hotel->id) selected @endif >{{ $hotel->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('hotel_id')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Người đặt</label>
                             <select class="form-control" name="user_id" id="user_id">
                                 <option value=""></option>
@@ -125,6 +139,15 @@
                             <label for="exampleInputEmail1">Số lượng trẻ sơ sinh</label>
                             <input type="number" class="form-control price" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number', 0) }}">
                             @error('baby_number')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tiền đặt cọc tối thiểu</label>
+                            <input type="number" class="form-control" name="deposit" id="exampleInputEmail1" placeholder="Tiền đặt cọc tối thiểu" value="{{ old('deposit', 0) }}">
+                            @error('deposit')
                                 <div class="text-danger">
                                     {{ $message }}
                                 </div>    

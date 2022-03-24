@@ -26,13 +26,19 @@ class Tour extends Model
         'adult_price',
         'children_price',
         'baby_price',
+        'deposit',
         'transport',
         'description',
-        'schedule'
+        'schedule',
     ];
 
     public function hotels()
     {
         return $this->belongsToMany(Hotel::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }
