@@ -6,6 +6,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostTasksController;
@@ -37,6 +38,14 @@ Route::get('/admin/forgot-password', [LoginController::class, 'getForgotPassword
 Route::post('/admin/forgot-password', [LoginController::class, 'postForgotPassword'])->name('post_forgot_password');
 Route::get('/admin/reset-password', [LoginController::class, 'getResetPassword'])->name('get_reset_password');
 Route::post('/admin/reset-password/{email}', [LoginController::class, 'postResetPassword'])->name('post_reset_password');
+
+Route::get('/', [HomeController::class, 'index'])->name('client.index');
+Route::get('/tours', [HomeController::class, 'tourList'])->name('client.tours.list');
+Route::get('/tours/{id}', [HomeController::class, 'tourDetail'])->name('client.tours.detail');
+Route::get('/articles', [HomeController::class, 'articleList'])->name('client.articles.list');
+Route::get('/articles/{id}', [HomeController::class, 'articleDetail'])->name('client.articles.detail');
+Route::get('/login', [HomeController::class, 'getLogin']);
+Route::get('/booking', [HomeController::class, 'booking']);
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin_middleware'], function () {
     Route::get('/', [AdminController::class, 'index']);

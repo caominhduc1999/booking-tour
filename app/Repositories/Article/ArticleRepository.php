@@ -26,4 +26,34 @@ class ArticleRepository extends RepositoryAbstract implements ArticleRepositoryI
             })
             ->paginate($perPage);
     }
+
+    public function getLatestArticlesByLimit($limit)
+    {
+        return $this->model->orderBy('created_at', 'desc')->limit($limit)->get();
+    }
+
+    public function getPaginate($perPage)
+    {
+        return $this->model->paginate($perPage);
+    }
+
+    public function getByCategoryId($id, $perPage)
+    {
+        return $this->model->where('category_id', $id)->paginate($perPage);
+    }
+
+    public function getByTagId($id, $perPage)
+    {
+        return $this->model->whereHas('tags', function($q) use ($id) {
+            return $q->where('tags.id', $id);
+        })->paginate($perPage);
+    }
+
+    public function search($search, $perPage)
+    {
+        return $this->model
+            ->where('title', 'like', '%' . $search . '%')
+            ->orWhere('overall', 'like', '%' . $search . '%')
+            ->paginate($perPage);
+    }
 }

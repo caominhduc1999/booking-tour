@@ -25,7 +25,8 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'image' => 'mimes:jpg,jpeg,gif,png'
+            'image' => 'nullable|mimes:jpg,jpeg,gif,png',
+            'overall' => 'max:255'
         ];
     }
 
@@ -33,7 +34,8 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title.required' => 'Vui lòng nhập tiêu đề',
-            'image.mimes' => 'Ảnh không hợp lệ'
+            'image.mimes' => 'Ảnh không hợp lệ',
+            'ovarall.max' => 'Độ dài tối đa là 255 kí tự'
         ];
     }
 }

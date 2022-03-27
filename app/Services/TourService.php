@@ -97,4 +97,9 @@ class TourService {
             return false;
         }     
     } 
+
+    public function getFeatureTours()
+    {
+        return $this->tourRepository->getFeatureTours();
+    }
 }

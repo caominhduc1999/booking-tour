@@ -32,7 +32,7 @@ class ArticleService {
     public function store($data) 
     {
         try {
-            if ($data['image']) {
+            if (isset($data['image'])) {
                 $image = rand() . '.' . $data['image']->getClientOriginalExtension();
                 $data['image']->move(storage_path('app/public/images'), $image);
                 $data['image'] = $image;
@@ -97,4 +97,29 @@ class ArticleService {
             return false;
         }     
     } 
+
+    public function getLatestArticlesByLimit($limit)
+    {
+        return $this->articleRepository->getLatestArticlesByLimit($limit);
+    }
+
+    public function getPaginate($perPage)
+    {
+        return $this->articleRepository->getPaginate($perPage);
+    }
+
+    public function getByCategoryId($id, $perPage)
+    {
+        return $this->articleRepository->getByCategoryId($id, $perPage);
+    }
+
+    public function getByTagId($id, $perPage)
+    {
+        return $this->articleRepository->getByTagId($id, $perPage);
+    }
+
+    public function search($search, $perPage)
+    {
+        return $this->articleRepository->search($search, $perPage);
+    }
 }

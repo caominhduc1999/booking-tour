@@ -40,6 +40,15 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Mô tả bài viết</label>
+                            <input type="text" class="form-control" name="overall" id="exampleInputEmail1" placeholder="Mô tả bài viết" value="{{ old('overall') }}">
+                            @error('overall')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Ảnh bài viết</label>
                             <input type="file" class="form-control" name="image" id="exampleInputEmail1">
                             @error('image')

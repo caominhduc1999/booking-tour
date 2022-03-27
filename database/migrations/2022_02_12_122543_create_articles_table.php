@@ -18,6 +18,7 @@ class CreateArticlesTable extends Migration
             $table->unsignedInteger('tour_id')->nullable();
             $table->unsignedInteger('category_id')->nullable();
             $table->string('title')->nullable();
+            $table->string('overall')->nullable();
             $table->text('description')->nullable();
             $table->text('image')->nullable();
             $table->timestamps();

@@ -14,6 +14,7 @@ class Article extends Model
         'category_id',
         'tour_id',
         'title',
+        'overall',
         'image',
         'description'
     ];

@@ -72,4 +72,9 @@ class TourRepository extends RepositoryAbstract implements TourRepositoryInterfa
             })
             ->paginate($perPage);
     }
+
+    public function getFeatureTours()
+    {
+        return $this->model->where('is_feature', 1)->orderBy('created_at', 'desc')->limit(6)->get();
+    }
 }
