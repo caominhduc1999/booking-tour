@@ -1,5 +1,8 @@
 @extends('admin.layouts.master')
 
+@section('css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+@endsection
 
 @section('content')
     <section class="content-header">
@@ -138,7 +141,7 @@
                             </select>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tour nổi bật</label>
                                     <select class="form-control" name="is_feature" id="">
@@ -153,7 +156,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Số người giới hạn</label>
                                     <input type="number" class="form-control" name="people_limit" id="exampleInputEmail1" placeholder="Số người giới hạn" value="{{ old('people_limit') }}">
@@ -164,11 +167,22 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Số ngày</label>
                                     <input type="number" class="form-control" name="days" id="exampleInputEmail1" placeholder="Số ngày" value="{{ old('days') }}">
                                     @error('days')
+                                        <div class="text-danger">
+                                            {{ $message }}
+                                        </div>    
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Số đêm</label>
+                                    <input type="number" class="form-control" name="nights" id="exampleInputEmail1" placeholder="Số đêm" value="{{ old('nights') }}">
+                                    @error('nights')
                                         <div class="text-danger">
                                             {{ $message }}
                                         </div>    
@@ -221,6 +235,20 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Hành trình</label>
+                            <input type="text" class="form-control" name="journey" id="exampleInputEmail1" placeholder="Hành trình" value="{{ old('journey') }}">
+                            @error('journey')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Khởi hành</label>
+                            <div id="mdp-demo"></div>
+                            <input type="text" hidden name="departure_date" id="departure_date">
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Nội dung</label>
                             <textarea class="form-control" name="description" id="local-upload" cols="30" rows="10">{!! old('description') !!}</textarea>
                             @error('description')
@@ -242,10 +270,45 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        <button type="submit" id="button-submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </form>
             </div>
         </div>
     </section>
+@endsection
+
+@section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.css" rel="stylesheet"/>
+<link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" rel="stylesheet"/>
+<script src="https://cdn.rawgit.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI/master/jquery-ui.multidatespicker.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $.datepicker.regional['vi'] = {
+        monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        monthNamesShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+        dayNames: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+        dayNamesShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+        dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['vi']);
+
+        var $j = jQuery.noConflict();
+        $j('#mdp-demo').multiDatesPicker({
+            onSelect: function() {
+                let dateArray = $j('#mdp-demo').multiDatesPicker('getDates')
+                $('#departure_date').val(dateArray)
+            }
+        });
+    })
+</script>
 @endsection

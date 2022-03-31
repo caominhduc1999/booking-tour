@@ -37,7 +37,7 @@
                         <h4>Tìm kiếm bài viết</h4>
                         <form class="search_form" role="search">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Search" name="search">
+                                <input type="text" class="form-control" placeholder="Từ khóa" name="search">
                             </div>
                             <button type="submit"><i class="fa fa-search"></i></button>
                         </form>

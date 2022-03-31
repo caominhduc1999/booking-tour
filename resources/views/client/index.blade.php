@@ -121,12 +121,12 @@
 
                                                 <div class="gc_filter_cont_overlay_wrapper">
                                                     <figure>
-                                                        <img src="{{ $tour->image ? URL::asset('storage/images/' . $tour->image : 'assets/image/default.jpg') }}"
+                                                        <img src="{{ $tour->image ? URL::asset('storage/images/' . $tour->image) : 'assets/image/default.jpg' }}"
                                                             class="zoom image img-responsive" alt="service_img" style="height: 250px"/>
                                                     </figure>
                                                     <div class="gc_filter_cont_overlay">
                                                         <div class="gc_filter_text"><a
-                                                                href="{{ $tour->image ? URL::asset('storage/images/' . $tour->image : 'assets/image/default.jpg') }}"><i
+                                                                href="{{ $tour->image ? URL::asset('storage/images/' . $tour->image) : 'assets/image/default.jpg' }}"><i
                                                                     class="fa fa-search-plus"></i></a></div>
 
                                                     </div>
@@ -212,10 +212,10 @@
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                 <article class="blog-post-wrapper clearfix">
                                     <div class="post-thumbnail">
-                                        <img src="{{ $article->image ? URL::asset('storage/images/' . $article->image : 'assets/image/default.jpg') }}" class="img-responsive " alt="Image" style="height: 200px; object-fit: contain;">
+                                        <img src="{{ $article->image ? URL::asset('storage/images/' . $article->image) : 'assets/image/default.jpg' }}" class="img-responsive " alt="Image" style="height: 200px; object-fit: contain;">
 
                                         <div class="author-thumb">
-                                            <a href="#"><img src="{{ $article->image ? URL::asset('storage/images/' . $article->image : 'assets/image/default.jpg') }}" class="img-responsive "
+                                            <a href="#"><img src="{{ $article->image ? URL::asset('storage/images/' . $article->image) : 'assets/image/default.jpg' }}" class="img-responsive "
                                                     alt="Image">
                                             </a>
                                         </div>

@@ -35,9 +35,18 @@ class HomeController extends Controller
         return view('client.index', compact('tours', 'articles'));
     }
 
+    public function tourList()
+    {
+        $tours = $this->tourService->paginate(4, []);
+
+        return view('client.tour_list', compact('tours'));
+    }
+
     public function tourDetail($id)
     {
-        return view('client.tour_detail');
+        $tour = $this->tourService->find($id);
+
+        return view('client.tour_detail', compact('tour'));
     }
 
     public function articleList(Request $request)
@@ -60,7 +69,12 @@ class HomeController extends Controller
 
     public function articleDetail($id)
     {
-        return view('client.article_detail');
+        $article = $this->articleService->find($id);
+        $categories = $this->categoryService->getAll();
+        $latestArticles = $this->articleService->getLatestArticlesByLimit(3);
+        $tags = $this->tagService->getAll();
+
+        return view('client.article_detail',  compact('article', 'categories', 'latestArticles', 'tags'));
     }
 
     public function getLogin()

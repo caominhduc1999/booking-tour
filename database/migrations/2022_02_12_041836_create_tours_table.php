@@ -26,10 +26,14 @@ class CreateToursTable extends Migration
             $table->integer('is_feature')->nullable();
             $table->integer('people_limit')->nullable();
             $table->integer('days')->nullable();
+            $table->integer('nights')->nullable();
             $table->double('adult_price')->nullable();
             $table->double('children_price')->nullable();
             $table->double('baby_price')->nullable();
             $table->string('transport')->nullable();
+            $table->text('journey')->nullable();
+            $table->text('description')->nullable();
+            $table->text('schedule')->nullable();
             $table->timestamps();
         });
     }
