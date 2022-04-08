@@ -30,6 +30,11 @@ class Booking extends Model
         'payment',
         'payment_status'
     ];
+    // payment: 
+    // 1 - thanh toan tai quay
+    // 2 - paypal
+    // 3 - momo
+    // 4 - vnpay
 
     public function tour()
     {

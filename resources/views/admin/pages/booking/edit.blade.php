@@ -45,20 +45,7 @@
                                 </div>    
                             @enderror
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Khách sạn</label>
-                            <select class="form-control" name="hotel_id">
-                                <option value=""></option>
-                                @foreach($hotels as $hotel)
-                                    <option value="{{ $hotel->id }}" @if(old('hotel_id') ? old('hotel_id') == $hotel->id : $booking->hotel_id == $hotel->id) selected @endif >{{ $hotel->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('hotel_id')
-                                <div class="text-danger">
-                                    {{ $message }}
-                                </div>    
-                            @enderror
-                        </div>
+                        
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên người đặt</label>
                             <input type="text" class="form-control" name="booking_person_name" id="booking_person_name" readonly placeholder="Tên người đặt" value="{{ old('booking_person_name', $booking->booking_person_name) }}">
@@ -95,9 +82,27 @@
                                 </div>    
                             @enderror
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="exampleInputEmail1">Ngày khởi hành</label>
                             <input type="date" class="form-control" name="start_date" id="exampleInputEmail1" placeholder="Ngày khởi hành" value="{{ old('start_date', $booking->start_date) }}">
+                            @error('start_date')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div> --}}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="exampleInputEmail1">Ngày khởi hành</label>
+                                    {{-- <input type="date" class="form-control" name="start_date" id="exampleInputEmail1" placeholder="Ngày khởi hành" value="{{ old('start_date') }}"> --}}
+                                    <input type="text" name="start_date" id="my_date_picker" value="{{ old('start_date', \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y')) }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Lịch khởi hành sắn có</label>
+                                    <div id="validDepartureDateArray"></div>
+                                </div>
+                            </div>
                             @error('start_date')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -132,19 +137,25 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Tiền đặt cọc tối thiểu</label>
-                            <input type="number" class="form-control" name="deposit" id="exampleInputEmail1" placeholder="Tiền đặt cọc tối thiểu" value="{{ old('deposit', $booking->deposit) }}">
-                            @error('deposit')
+                            <label for="exampleInputEmail1">Khách sạn</label>
+                            <select class="form-control" name="hotel_id" id="hotel_id">
+                                <option value=""></option>
+                                @foreach($hotels as $hotel)
+                                    <option value="{{ $hotel->id }}" data-value="{{ $hotel }}" @if(old('hotel_id') ? old('hotel_id') == $hotel->id : $booking->hotel_id == $hotel->id) selected @endif >{{ $hotel->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('hotel_id')
                                 <div class="text-danger">
                                     {{ $message }}
                                 </div>    
                             @enderror
                         </div>
+                        <input type="hidden" id="hotel_price">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tổng tiền</label>
-                            <input type="number" class="form-control total-price" id="exampleInputEmail1" placeholder="" value="" disabled>
+                            <input type="number" class="form-control total-price" id="exampleInputEmail1" placeholder="" value="{{ $booking->total_price }}" disabled>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="exampleInputEmail1">Mã giảm giá</label>
                             <select class="form-control" name="discount_id" id="discount-selection">
                                 <option value=""></option>
@@ -157,11 +168,11 @@
                                     {{ $message }}
                                 </div>    
                             @enderror
-                        </div>
-                        <div class="form-group">
+                        </div> --}}
+                        {{-- <div class="form-group">
                             <label for="exampleInputEmail1">Tổng tiền (sau khi áp dụng mã giảm giá)</label>
                             <input type="number" class="form-control total-price-after-discount" id="exampleInputEmail1" placeholder="0" value="{{ $booking->total_price }}" disabled>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label for="exampleInputEmail1">Ghi chú</label>
                             <textarea class="form-control" name="note" id="local-upload" cols="30" rows="10">{!! old('note', $booking->note) !!}</textarea>
@@ -222,10 +233,14 @@
 @endsection
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://code.jquery.com/ui/1.12.1/themes/pepper-grinder/jquery-ui.css" rel="stylesheet"/>
     <script>
         $(document).ready(function() {
             let tour = JSON.parse($("#tour-selection :selected")[0].dataset.value)
-            calculateTotalPrice(tour)
+            // calculateTotalPrice(tour)
 
             $('.total-price').val()
             $("#tour-selection").change(function () {
@@ -233,14 +248,24 @@
                 
                 var tourData = optionSelected[0].dataset.value != undefined ? JSON.parse(optionSelected[0].dataset.value) : null;
                 calculateTotalPrice(tourData)
-                calculateTotalPriceAfterDiscount()
+                calculateHotelPrice()
+                // calculateTotalPriceAfterDiscount()
             })
 
             $('.price').change(function() {
                 let selectedTour = $("#tour-selection :selected")
                 let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
                 calculateTotalPrice(tourData)
-                calculateTotalPriceAfterDiscount()
+                calculateHotelPrice()
+                // calculateTotalPriceAfterDiscount()
+            })
+
+            $('.price').keyup(function() {
+                let selectedTour = $("#tour-selection :selected")
+                let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
+                calculateTotalPrice(tourData)
+                calculateHotelPrice()
+                // calculateTotalPriceAfterDiscount()
             })
 
             function calculateTotalPrice(data) {
@@ -256,22 +281,134 @@
                 $('.total-price').val(totalPrice)
             }
 
-            $("#discount-selection").change(function () {
-                calculateTotalPriceAfterDiscount()
+            $("#hotel_id").change(function () {
+                // var optionSelected = $("option:selected", this);
+                
+                // var hotelData = optionSelected[0].dataset.value != undefined ? JSON.parse(optionSelected[0].dataset.value) : null;
+
+                // let selectedTour = $("#tour-selection :selected")
+                // let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
+                // let hotelPrice = parseInt(hotelData.price_per_day) * parseInt(tourData.days) + parseInt(hotelData.price_per_night) * parseInt(tourData.nights);
+                // $('#hotel_price').val(hotelPrice)
+                // let hotelPriceValue = parseInt($('#hotel_price').val())
+
+                // let adultPrice = tourData.adult_price
+                // let childrenPrice = tourData.children_price
+                // let babyPrice = tourData.baby_price
+
+                // let adultNumber = $('input[name="adult_number"]').val()
+                // let childrenNumber = $('input[name="children_number"]').val()
+                // let babyNumber = $('input[name="baby_number"]').val()
+
+                // let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
+
+                // $('.total-price').val(totalPrice + hotelPriceValue)
+                calculateHotelPrice()
             })
 
-            function calculateTotalPriceAfterDiscount() {
-                let selectedDiscount = $("#discount-selection :selected")
-                let discountData = selectedDiscount[0].dataset.value != undefined ? JSON.parse(selectedDiscount[0].dataset.value) : null
-                if (discountData != null) {
-                    let discountRate = discountData.discount_rate
-                    let totalPriceAfterDiscount = $('.total-price').val() * (1 - discountRate)
-                    $('.total-price-after-discount').val(totalPriceAfterDiscount)
+            function calculateHotelPrice()
+            {
+                var optionSelected = $("#hotel_id :selected");
+                
+                var hotelData = optionSelected[0].dataset.value != undefined ? JSON.parse(optionSelected[0].dataset.value) : null;
+
+                let selectedTour = $("#tour-selection :selected")
+                let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
+                if (hotelData != undefined) {
+                    let hotelPrice = parseInt(hotelData.price_per_day) * parseInt(tourData.days) + parseInt(hotelData.price_per_night) * parseInt(tourData.nights);
+                    $('#hotel_price').val(hotelPrice)
+                    let hotelPriceValue = parseInt($('#hotel_price').val())
+
+                    let adultPrice = tourData.adult_price
+                    let childrenPrice = tourData.children_price
+                    let babyPrice = tourData.baby_price
+    
+                    let adultNumber = $('input[name="adult_number"]').val()
+                    let childrenNumber = $('input[name="children_number"]').val()
+                    let babyNumber = $('input[name="baby_number"]').val()
+    
+                    let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
+    
+                    $('.total-price').val(totalPrice + hotelPriceValue)
                 } else {
-                    let totalPriceAfterDiscount = $('.total-price').val()
-                    $('.total-price-after-discount').val(totalPriceAfterDiscount)
+                    let adultPrice = tourData.adult_price
+                    let childrenPrice = tourData.children_price
+                    let babyPrice = tourData.baby_price
+    
+                    let adultNumber = $('input[name="adult_number"]').val()
+                    let childrenNumber = $('input[name="children_number"]').val()
+                    let babyNumber = $('input[name="baby_number"]').val()
+    
+                    let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
+    
+                    $('.total-price').val(totalPrice)
                 }
             }
+
+            function getDepartureDate() {
+                let selectedTour = $("#tour-selection :selected")
+                let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
+                let departureDate = tourData.departure_date
+                let departureDateArray = departureDate.split(',')
+                let validDepartureDateArray = [];
+                departureDateArray.forEach(function(item) {
+                    let selectItemDate = item.split('/')
+                    let formatItemDate = `${selectItemDate[1]}/${selectItemDate[0]}/${selectItemDate[2]}`
+                    let currentDate = new Date()
+                    let itemDate = new Date(formatItemDate)
+                    if (itemDate > currentDate) {
+                        validDepartureDateArray.push(item)
+                    }
+                })
+                let html = ''
+                validDepartureDateArray.forEach(function(item) {
+                    html += `<label>${item}</label><br>`
+                })
+                $('#validDepartureDateArray').html(html)
+    
+                $.datepicker.regional['vi'] = {
+                monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                monthNamesShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                dayNames: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+                dayNamesShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+                dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+                };
+    
+                $.datepicker.setDefaults($.datepicker.regional['vi']);
+                
+                $("#my_date_picker").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    beforeShowDay: function(date) {
+                        var string = jQuery.datepicker.formatDate('dd/mm/yy', date);
+    
+                        return [validDepartureDateArray.indexOf(string) != -1]
+                    }
+                })
+            }
+            getDepartureDate()
+
+            $("#discount-selection").change(function () {
+                // calculateTotalPriceAfterDiscount()
+            })
+
+            // function calculateTotalPriceAfterDiscount() {
+            //     let selectedDiscount = $("#discount-selection :selected")
+            //     let discountData = selectedDiscount[0].dataset.value != undefined ? JSON.parse(selectedDiscount[0].dataset.value) : null
+            //     if (discountData != null) {
+            //         let discountRate = discountData.discount_rate
+            //         let totalPriceAfterDiscount = $('.total-price').val() * (1 - discountRate)
+            //         $('.total-price-after-discount').val(totalPriceAfterDiscount)
+            //     } else {
+            //         let totalPriceAfterDiscount = $('.total-price').val()
+            //         $('.total-price-after-discount').val(totalPriceAfterDiscount)
+            //     }
+            // }
         })
     </script>
 @endsection

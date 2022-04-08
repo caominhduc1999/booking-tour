@@ -14,6 +14,8 @@ class Hotel extends Model
         'name',
         'hotline',
         'address',
+        'price_per_day',
+        'price_per_night',
         'note'
     ];
 

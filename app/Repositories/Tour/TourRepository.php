@@ -77,4 +77,45 @@ class TourRepository extends RepositoryAbstract implements TourRepositoryInterfa
     {
         return $this->model->where('is_feature', 1)->orderBy('created_at', 'desc')->limit(6)->get();
     }
+
+    public function getLatestTourByLimit($limit)
+    {
+        return $this->model->latest()->limit(3)->get();
+    }
+
+    public function search($search, $perPage)
+    {
+        return $this->model
+            ->where('name', 'like', '%' . $search . '%')
+            ->orWhere('journey', 'like', '%' . $search . '%')
+            ->paginate($perPage);
+    }
+
+    public function findByCondition($conditions, $perPage)
+    {
+        return $this->model
+            ->when(isset($conditions['name']), function($q) use ($conditions) {
+                return $q->where('name', 'like', '%' . $conditions['name'] . '%')
+                ->orWhere('journey', 'like', '%' . $conditions['name'] . '%');
+            })
+            ->when(isset($conditions['from_price']), function($q) use ($conditions) {
+                return $q->where('adult_price', '>=', $conditions['from_price']);
+            })
+            ->when(isset($conditions['to_price']), function($q) use ($conditions) {
+                return $q->where('adult_price', '<=', $conditions['to_price']);
+            })
+            ->when(isset($conditions['type']), function($q) use ($conditions) {
+                return $q->where('type', $conditions['type']);
+            })
+            ->when(isset($conditions['frequency']), function($q) use ($conditions) {
+                return $q->where('frequency', $conditions['frequency']);
+            })
+            ->when(isset($conditions['from_days']), function($q) use ($conditions) {
+                return $q->where('days', '>=', $conditions['from_days']);
+            })
+            ->when(isset($conditions['to_days']), function($q) use ($conditions) {
+                return $q->where('days', '<=', $conditions['to_days']);
+            })
+            ->paginate($perPage);
+    }
 }

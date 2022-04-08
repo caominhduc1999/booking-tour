@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Repositories\Booking\BookingRepository;
 use App\Repositories\Discount\DiscountRepository;
+use App\Repositories\Hotel\HotelRepository;
 use App\Repositories\Tour\TourRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -12,15 +14,18 @@ class BookingService {
     protected $bookingRepository;
     protected $tourRepository;
     protected $discountRepository;
+    protected $hotelRepository;
     
     public function __construct(
         BookingRepository $bookingRepository,
         TourRepository $tourRepository,
-        DiscountRepository $discountRepository
+        DiscountRepository $discountRepository,
+        HotelRepository $hotelRepository
     ) {
         $this->bookingRepository = $bookingRepository;   
         $this->tourRepository = $tourRepository;
         $this->discountRepository = $discountRepository;
+        $this->hotelRepository = $hotelRepository;
     }
 
     public function getAll()
@@ -47,17 +52,24 @@ class BookingService {
             $babyPrice = $tour->baby_price * $data['baby_number'];
 
             $data['total_price'] = $adultPrice + $childrenPrice + $babyPrice;
-            if ($data['discount_id']) {
+            if (isset($data['discount_id'])) {
                 
                 $discount = $this->discountRepository->find($data['discount_id']);
                 if ($discount) {
                     $data['total_price'] = $data['total_price'] * (1 - $discount->discount_rate);
                 }
             }
-            $data['booking_date'] = now()->format('Y-m-d');
-            $this->bookingRepository->store($data);
 
-            return true;
+            if (isset($data['hotel_id'])) {
+                $hotel = $this->hotelRepository->find($data['hotel_id']);
+                $data['total_price'] = $data['total_price'] + $hotel->price_per_day * $tour->days + $hotel->price_per_night * $tour->nights;
+            }
+
+            $data['start_date'] = Carbon::createFromFormat('d/m/Y', $data['start_date'])->format('Y-m-d');
+            $data['booking_date'] = now()->format('Y-m-d');
+            $booking = $this->bookingRepository->store($data);
+
+            return $booking;
         } catch (Exception $e){
             Log::info($e->getMessage());
             
@@ -74,13 +86,19 @@ class BookingService {
             $babyPrice = $tour->baby_price * $data['baby_number'];
 
             $data['total_price'] = $adultPrice + $childrenPrice + $babyPrice;
-            if ($data['discount_id']) {
+            if (isset($data['discount_id'])) {
                 
                 $discount = $this->discountRepository->find($data['discount_id']);
                 if ($discount) {
                     $data['total_price'] = $data['total_price'] * (1 - $discount->discount_rate);
                 }
             }
+            
+            if (isset($data['hotel_id'])) {
+                $hotel = $this->hotelRepository->find($data['hotel_id']);
+                $data['total_price'] = $data['total_price'] + $hotel->price_per_day * $tour->days + $hotel->price_per_night * $tour->nights;
+            }
+            $data['start_date'] = Carbon::createFromFormat('d/m/Y', $data['start_date'])->format('Y-m-d');
             $this->bookingRepository->update($id, $data);
 
             return true;

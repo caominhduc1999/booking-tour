@@ -27,6 +27,19 @@ Author: Webstrot
     <link href="{{ asset('assets/client/css/login_and_register.css') }}" rel="stylesheet">
     <!-- Common Style CSS -->
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet">
+    <style>
+        .login_btn {
+            background-color: #4385f5;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -48,8 +61,14 @@ Author: Webstrot
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
+                        @if(Session::has('notify'))
+                            <div class="alert alert-danger">
+                                {{ Session::get('notify')}}
+                            </div>
+                        @endif
                         <!-- login_wrapper -->
-                        <div class="login_wrapper">
+                        <form class="login_wrapper" action="{{ route('client_post_login') }}" method="POST">
+                            @csrf
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
                                     <a href="#" class="btn btn-primary"> <span>Login with Facebook</span> <i
@@ -63,32 +82,32 @@ Author: Webstrot
                             <h2>or</h2>
                             <div class="formsix-pos">
                                 <div class="form-group i-email">
-                                    <input type="email" class="form-control" required="" id="email2"
+                                    <input type="email" name="email" class="form-control" required="" id="email2"
                                         placeholder="Email Address *">
                                 </div>
                             </div>
                             <div class="formsix-e">
                                 <div class="form-group i-password">
-                                    <input type="password" class="form-control" required="" id="password2"
-                                        placeholder="Password *">
+                                    <input type="password" name="password" class="form-control" required="" id="password2"
+                                        placeholder="Mật khẩu *">
                                 </div>
                             </div>
                             <div class="login_remember_box">
-                                <label class="control control--checkbox">Remember me
-                                    <input type="checkbox">
+                                <label class="control control--checkbox">Ghi nhớ mật khẩu
+                                    <input type="checkbox" name="remember_me">
                                     <span class="control__indicator"></span>
                                 </label>
                                 <a href="#" class="forget_password">
-                                    Forgot Password
+                                    Quên mật khẩu
                                 </a>
                             </div>
                             <div class="login_btn_wrapper">
-                                <a href="#" class="btn btn-primary login_btn"> Login </a>
+                                <button type="submit" class="btn btn-primary login_btn"> Đăng nhập </button>
                             </div>
                             <div class="login_message">
-                                <p>Don’t have an account ? <a href="#"> Sign up </a> </p>
+                                <p>Chưa có tài khoản ? <a href="{{ route('client_get_register') }}"> Đăng ký </a> </p>
                             </div>
-                        </div>
+                        </form>
                         <!-- /.login_wrapper-->
                     </div>
                 </div>

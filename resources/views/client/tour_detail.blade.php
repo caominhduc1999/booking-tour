@@ -91,19 +91,24 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="entry-content" style="margin-top: 20px;">
+                            <div class="entry-content row" style="margin-top: 20px;">
                                 <br>
-                                <div style="font-size: 16px;">
-                                    <b >Lịch khởi hành: </b>
-                                    <br>
-                                        @foreach(explode(",", $tour->departure_date) as $date)
-                                            {{ $date }}
-                                            <br>
-                                        @endforeach
-                                    <br>
-                                    <b >Điểm khởi hành: </b>{{ $tour->departure }}<br>
-                                    <b >Điểm đến: </b>{{ $tour->destination }}<br>
-                                    <b >Vận chuyển: </b>{{ $tour->transport }}<br>
+                                <div class="col-md-6">
+                                    <div style="font-size: 16px;">
+                                        <b >Lịch khởi hành: </b>
+                                        <br>
+                                            @foreach(explode(",", $tour->departure_date) as $date)
+                                                {{ $date }}
+                                                <br>
+                                            @endforeach
+                                        <br>
+                                        <b >Điểm khởi hành: </b>{{ $tour->departure }}<br>
+                                        <b >Điểm đến: </b>{{ $tour->destination }}<br>
+                                        <b >Vận chuyển: </b>{{ $tour->transport }}<br>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ route('booking', $tour->id) }}"><button class="btn btn-warning" style="width: 100%; font-size: 2rem;">ĐẶT TOUR NGAY</button></a>
                                 </div>
                                 <div style="margin-top: 10px;">
                                     <table class="table table-bordered">

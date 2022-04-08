@@ -68,4 +68,9 @@ class DiscountService {
             return false;
         }     
     } 
+
+    public function findByField($field, $value)
+    {
+        return $this->discountRepository->findByField($field, $value);
+    }
 }

@@ -102,4 +102,19 @@ class TourService {
     {
         return $this->tourRepository->getFeatureTours();
     }
+
+    public function getLatestTourByLimit($limit)
+    {
+        return $this->tourRepository->getLatestTourByLimit($limit);
+    }
+
+    public function search($search, $perPage)
+    {
+        return $this->tourRepository->search($search, $perPage);
+    }
+
+    public function findByCondition($conditions, $perPage)
+    {
+        return $this->tourRepository->findByCondition($conditions, $perPage);
+    }
 }

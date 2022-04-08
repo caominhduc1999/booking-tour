@@ -1,4 +1,17 @@
     <!-- header start -->
+    <style>
+        .login-button {
+            background-color: #4385f5;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            width: 100%;
+        }
+    </style>
     <div class="header">
         <div class="top-bar">
             <div class="container">
@@ -24,44 +37,55 @@
                                         <li><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
                                     </ul>
                                 </li>
-                                <!-- Cart Option -->
-                                <li class="dropdown signin_wrapper">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-sign-in"></i> Đăng ký/ Đăng nhập
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li class="signin_dropdown">
-                                            <div class="formsix-pos">
-                                                <div class="form-group i-email">
-                                                    <input type="email" class="form-control" required="" id="emailTen"
-                                                        placeholder="Email Address *">
-                                                </div>
-                                            </div>
-                                            <div class="formsix-e">
-                                                <div class="form-group i-password">
-                                                    <input type="password" class="form-control" required=""
-                                                        id="namTen-first" placeholder="Password *">
-                                                </div>
-                                            </div>
-                                            <div class="remember_box">
-                                                <label class="control control--checkbox">Remember me
-                                                    <input type="checkbox">
-                                                    <span class="control__indicator"></span>
-                                                </label>
-                                                <a href="#" class="forget_password">
-                                                    Quên mật khẩu
-                                                </a>
-                                            </div>
-                                            <div class="login_wrapper">
-                                                <a href="#" class="btn btn-primary login_btn"> Đăng nhập </a>
-                                            </div>
-                                            <div class="sign_up_message">
-                                                <p>Chưa có tài khoản ? <a href="#"> Đăng ký </a> </p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <!-- /.Cart Option -->
+                                @if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->role == 2)
+                                    <li class="dropdown signin_wrapper">
+                                        <a>Xin chào {{ Auth::user()->name }}</a>
+                                    </li>
+                                    <li> </li>
+                                    <li class="dropdown signin_wrapper">
+                                        <a href="/logout" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-sign-in"></i> Đăng xuất
+                                        </a>
+                                    </li>
+                                @else 
+                                     <!-- Cart Option -->
+                                     <li class="dropdown signin_wrapper">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-sign-in"></i> Đăng ký/ Đăng nhập
+                                        </a>
+                                        <form action="{{ route('client_post_login') }}" method="post" id="login-form">
+                                            @csrf
+                                            <ul class="dropdown-menu">
+                                                <li class="signin_dropdown">
+                                                    <div class="formsix-pos">
+                                                        <div class="form-group i-email">
+                                                            <input type="email" name="email" class="form-control" required="" id="emailTen"
+                                                                placeholder="Email Address *">
+                                                        </div>
+                                                    </div>
+                                                    <div class="formsix-e">
+                                                        <div class="form-group i-password">
+                                                        <input type="password" name="password" class="form-control" required=""
+                                                            id="namTen-first" placeholder="Password *">
+                                                    </div>
+                                                    </div>
+                                                    <div class="remember_box">
+                                                        <input type="checkbox" name="remember_me"> Ghi nhớ mật khẩu
+                                                    
+                                                    </div>
+                                                    <div class="login_wrapper">
+                                                        <button class="login-button">Đăng nhập</button>
+                                                    </div>
+                                                    <div class="sign_up_message">
+                                                        <p>Chưa có tài khoản ? <a href="/register"> Đăng ký </a> </p>
+                                                        <p> <a href="" class="forget-passưord">Quên mật khẩu</a></p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </form>
+                                    </li>
+                                    <!-- /.Cart Option -->
+                                @endif
                             </ul>
                         </div>
                         <!-- /.signin_and_social_icon_wrapper end -->
@@ -81,19 +105,19 @@
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
                             <li class="active dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                     aria-haspopup="true" aria-expanded="false">
                                     Trang chủ
                                 </a>
                             </li>
                             <li class="active dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                <a href="{{ route('client.articles.list') }}" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                     aria-haspopup="true" aria-expanded="false">
                                     Bài viết
                                 </a>
                             </li>
                             <li class="active dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                <a href="{{ route('client.tours.list') }}" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                     aria-haspopup="true" aria-expanded="false">
                                     Danh sách Tours
                                 </a>
@@ -144,16 +168,16 @@
                                 </button>
                             </form>
                         </li>
-                        <li class='has-sub'><a href='#'>Trang chủ</a>
+                        <li class='has-sub'><a href='/'>Trang chủ</a>
                         </li>
-                        <li class='has-sub'><a href='#'>Bài viết</a>
+                        <li class='has-sub'><a href='{{ route('client.articles.list') }}'>Bài viết</a>
                         </li>
-                        <li class='has-sub'><a href='#'>Danh sách Tours</a>
+                        <li class='has-sub'><a href='{{ route('client.tours.list') }}'>Danh sách Tours</a>
                         </li>
                         <li class='has-sub'><a href='#'>Lịch sử đặt tour</a>
                         </li>
                         <li class="sidebar_login">
-                            <a href="login_and_register.html" class="btn btn-primary">Login/Register</a>
+                            <a href="/login" class="btn btn-primary">Login/Register</a>
                         </li>
 
                     </ul>

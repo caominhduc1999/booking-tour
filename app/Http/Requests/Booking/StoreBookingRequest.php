@@ -25,7 +25,7 @@ class StoreBookingRequest extends FormRequest
     {
         return [
             'tour_id' => 'required',
-            'start_date' => 'required|date',
+            'start_date' => 'required',
             'adult_number' => 'required|numeric|min:0',
             'children_number' => 'required|numeric|min:0',
             'baby_number' => 'required|numeric|min:0',
@@ -42,7 +42,6 @@ class StoreBookingRequest extends FormRequest
         return [
             'tour_id.required' => 'Vui lòng chọn tour',
             'start_date.required' => 'Vui lòng nhập ngày khởi hành',
-            'start_date.date' => 'Ngày khởi hành không hợp lệ',
             'adult_number.required' => 'Vui lòng nhập số lượng người lớn',
             'children_number.required' => 'Vui lòng nhập số lượng trẻ em',
             'baby_number.required' => 'Vui lòng nhập số lượng trẻ sơ sinh',

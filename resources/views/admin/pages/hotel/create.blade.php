@@ -58,6 +58,24 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Giá tiền 1 ngày</label>
+                            <input type="number" class="form-control" name="price_per_day" id="exampleInputEmail1" placeholder="Giá tiền 1 ngày" value="{{ old('price_per_day') }}">
+                            @error('price_per_day')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Giá tiền 1 đêm</label>
+                            <input type="number" class="form-control" name="price_per_night" id="exampleInputEmail1" placeholder="Giá tiền 1 đêm" value="{{ old('price_per_night') }}">
+                            @error('price_per_night')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Ghi chú</label>
                             <textarea class="form-control" name="note" id="local-upload" cols="30" rows="10">{!! old('note') !!}</textarea>
                             @error('note')

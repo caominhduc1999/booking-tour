@@ -24,7 +24,7 @@ class LoginController extends Controller
 
     public function getLogin()
     {
-        if (Auth::check()) {
+        if (Auth::check() && Auth::user()->role == 1) {
             return redirect('/admin');
         }
 
@@ -34,7 +34,12 @@ class LoginController extends Controller
     public function postLogin(LoginRequest $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember_me)) {
-            return redirect('/admin');
+            $user = $this->userService->findByField('email', $request->email)->first();
+            if ($user->role == 1) {
+                return redirect('/admin');
+            } else {
+                return redirect()->back()->with('notify', 'Sai email hoặc mật khẩu');
+            }
         } else {
             return redirect()->back()->with('notify', 'Sai email hoặc mật khẩu');
         }

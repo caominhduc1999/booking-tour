@@ -44,8 +44,16 @@ Route::get('/tours', [HomeController::class, 'tourList'])->name('client.tours.li
 Route::get('/tours/{id}', [HomeController::class, 'tourDetail'])->name('client.tours.detail');
 Route::get('/articles', [HomeController::class, 'articleList'])->name('client.articles.list');
 Route::get('/articles/{id}', [HomeController::class, 'articleDetail'])->name('client.articles.detail');
-Route::get('/login', [HomeController::class, 'getLogin']);
-Route::get('/booking', [HomeController::class, 'booking']);
+Route::get('/login', [HomeController::class, 'getLogin'])->name('client_get_login');
+Route::post('/login', [HomeController::class, 'postLogin'])->name('client_post_login');
+Route::get('/register', [HomeController::class, 'getRegister'])->name('client_get_register');
+Route::post('/register', [HomeController::class, 'postRegister'])->name('client_post_register');
+Route::get('/logout', [HomeController::class, 'logout'])->name('client_get_logout');
+Route::get('/booking/{tourId}', [HomeController::class, 'booking'])->name('booking');
+Route::post('/booking/{tourId}', [HomeController::class, 'confirmBooking'])->name('confirm.booking');
+Route::get('/get-discount/{code}', [HomeController::class, 'getDiscount']);
+Route::post('/momo-payment', [HomeController::class, 'momoPayment'])->name('momo_payment');
+Route::get('/complete-booking', [HomeController::class, 'completeBooking'])->name('complete_booking');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin_middleware'], function () {
     Route::get('/', [AdminController::class, 'index']);

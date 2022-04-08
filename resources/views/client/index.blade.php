@@ -106,7 +106,7 @@
                 <div class="col-lg-8 col-md-12 col-xs-12 col-sm-12 col-lg-offset-2">
                     <div class="section_heading">
                         <h2>Tour du lịch nổi bật</h2>
-                        <a href=""><p class="text-primary">Khám phá thêm nhiều tour hơn tại đây >>></p></a>
+                        <a href="{{ route('client.tours.list') }}"><p class="text-primary">Khám phá thêm nhiều tour hơn tại đây >>></p></a>
                     </div>
                 </div>
                 <!-- section_heading end -->
@@ -132,10 +132,10 @@
                                                     </div>
                                                     <div class="tab_image_text">
                                                         <div class="project_title">
-                                                            <h4><a href="#">{{ $tour->name }}</a></h4>
+                                                            <h4><a href="{{ route('client.tours.detail', $tour->id) }}">{{ $tour->name }}</a></h4>
                                                         </div>
                                                         <div class="project_category">
-                                                            <h4><a href="#">{{ $tour->type == 1 ? 'Trong nước' : 'Ngoài nước' }}</a></h4>
+                                                            <h4><a href="{{ route('client.tours.list') . '?type=' . $tour->type }}">{{ $tour->type == 1 ? 'Trong nước' : 'Quốc tế' }}</a></h4>
                                                         </div>
                                                         <div class="project_likes">
                                                             <h2 style="color: #ed4e4e"><i class="fa fa-money" aria-hidden="true"></i>

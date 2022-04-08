@@ -1,5 +1,11 @@
 @extends('admin.layouts.master')
-
+<style>
+    @media only screen and (max-width: 768px) {
+        .select2-selection {
+            width: 350px;
+        }
+    }
+</style>
 
 @section('content')
     <section class="content-header">
@@ -245,8 +251,25 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Khởi hành</label>
-                            <div id="mdp-demo"></div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div id="mdp-demo"></div>
+                                </div>
+                                <div class="col-md-8">
+                                    <p id="selected_date"></p>
+                                </div>
+                            </div>
+                           
                             <input type="text" hidden name="departure_date" id="departure_date" value="{{ $tour->departure_date }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tiền đặt cọc tối thiểu</label>
+                            <input type="number" class="form-control" name="deposit" id="exampleInputEmail1" placeholder="Tiền đặt cọc tối thiểu" value="{{ old('deposit', $tour->deposit) }}">
+                            @error('deposit')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Nội dung</label>
@@ -289,7 +312,11 @@
         let hotelIds = @json($initialHotelIds);
         let departureDate = '{{ $tour->departure_date }}'
         let departureDateArray = departureDate.split(',')
-
+        let oldHtml = ''
+        departureDateArray.forEach(function(item) {
+            oldHtml += `${item}<br>`
+        })
+        $('#selected_date').html(oldHtml)
         $(document).ready(function() {
             $.datepicker.regional['vi'] = {
             monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
@@ -312,6 +339,11 @@
                 onSelect: function() {
                     let dateArray = $j('#mdp-demo').multiDatesPicker('getDates')
                     $('#departure_date').val(dateArray)
+                    let html = ''
+                    dateArray.forEach(function(item) {
+                        html += `${item}<br>`
+                    })
+                    $('#selected_date').html(html)
                 },
                 addDates: departureDateArray
             });

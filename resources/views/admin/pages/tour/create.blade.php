@@ -2,6 +2,13 @@
 
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+<style>
+    @media only screen and (max-width: 768px) {
+        .select2-selection {
+            width: 350px;
+        }
+    }
+</style>
 @endsection
 
 @section('content')
@@ -245,8 +252,24 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Khởi hành</label>
-                            <div id="mdp-demo"></div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div id="mdp-demo"></div>
+                                </div>
+                                <div class="col-md-8">
+                                    <p id="selected_date"></p>
+                                </div>
+                            </div>
                             <input type="text" hidden name="departure_date" id="departure_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tiền đặt cọc tối thiểu</label>
+                            <input type="number" class="form-control" name="deposit" id="exampleInputEmail1" placeholder="Tiền đặt cọc tối thiểu" value="{{ old('deposit', 0) }}">
+                            @error('deposit')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>    
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Nội dung</label>
@@ -307,6 +330,11 @@
             onSelect: function() {
                 let dateArray = $j('#mdp-demo').multiDatesPicker('getDates')
                 $('#departure_date').val(dateArray)
+                let html = ''
+                dateArray.forEach(function(item) {
+                    html += `${item}<br>`
+                })
+                $('#selected_date').html(html)
             }
         });
     })
