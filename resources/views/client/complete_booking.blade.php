@@ -33,13 +33,18 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="btc_shop_single_prod_right_section shop_product_single_head related_pdt_shop_head">
                         <h1>
-                            Thanh toán thành công. 
+                            @if ($paymentMethod != null)
+                                Thanh toán thành công bằng {{$paymentMethod }}.
+                            @else 
+                                Hoàn tất đặt tour. Vui lòng liên hệ SĐT 1234567890 để thanh toán tại quầy.
+                            @endif 
                             <br>
                             <br>
-                            Thông tin đặt tour của bạn sẽ được gửi về mail: {{ $email }}. 
+                            Thông tin đặt tour của bạn sẽ được gửi về mail:<br> {{ $email }}. 
                             <br>
                             <br>
                             Xin chân thành cảm ơn.</h1>
+                            <a href="/"><button class="btn btn-primary">Trở về trang chủ</button></a>
                     </div>
                 </div>
                

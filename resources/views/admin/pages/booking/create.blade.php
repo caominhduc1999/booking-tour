@@ -189,9 +189,7 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Hình thức thanh toán</label>
                             <select class="form-control" name="payment" id="">
-                                <option value="1">Tiền mặt</option>
-                                <option value="2">Stripe</option>
-                                <option value="3">Momo</option>
+                                <option value="1">TT tại quầy</option>
                             </select>
                             @error('payment')
                                 <div class="text-danger">

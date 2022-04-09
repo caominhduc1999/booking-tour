@@ -30,16 +30,17 @@
     <div class="cart_product_wrapper">
         <div class="container">
             <div class="row">
+                @if(Session::has('notify'))
+                    <div class="alert alert-danger">
+                        <h1></h1>{{ Session::get('notify')}}</h1>
+                    </div>
+                @endif
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="btc_shop_single_prod_right_section shop_product_single_head related_pdt_shop_head">
                         <h1>Xác nhận thông tin đặt tour của bạn</h1>
                     </div>
                 </div>
-                @if(Session::has('notify'))
-                    <div class="alert alert-danger">
-                        {{ Session::get('notify')}}
-                    </div>
-                @endif
+                
                 <div class="shop_cart_page_wrapper">
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <div class="">
@@ -78,16 +79,10 @@
                                         </div>
                                     </div>
                                     <br>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <b>Lịch khởi hành:</b>
-                                            <div id="validDepartureDateArray"></div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <hr>
-                            <h2>Vui lòng nhập đầy đủ thông tin đặt tour</h2>
+                            <h2>Xác nhận thông tin đặt tour</h2>
                             <br>
                             <div>
                                 <div class="row" style="margin-left: 0px;">
@@ -97,13 +92,13 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <label for="">Số lượng người lớn: {{ $booking->adult_number }}</label>
+                                        <label for="">Số lượng người lớn: {{ $booking->adult_number }} người</label>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="">Số lượng trẻ em (từ 6 - 12 tuổi): {{ $booking->children_number }}</label>
+                                        <label for="">Số lượng trẻ em (từ 6 - 12 tuổi): {{ $booking->children_number }} người</label>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="">Số lượng trẻ nhỏ (dưới 6 tuổi): {{ $booking->baby_number }}</label>
+                                        <label for="">Số lượng trẻ nhỏ (dưới 6 tuổi): {{ $booking->baby_number }} người</label>
                                     </div>
                                 </div>
                                 <br>
@@ -150,16 +145,45 @@
 
                         <div class="shipping_Wrapper">
                             <div class="estimate_shiping_Wrapper_cntnt estimate_shiping_Wrapper_repsnse">
-                                <h1 style="margin-top: 10px; color: red;">Tổng tiền: {{ number_format($booking->booking_price) }} VNĐ</h1>
+                                <h1 style="margin-top: 10px; color: red; margin-bottom: 10px;">Tổng tiền: {{ number_format($booking->booking_price) }} VNĐ</h1>
                                 <div class="shop_btn_wrapper shop_btn_wrapper_shipping" >
-                                    <form action="">
 
+                                    <form action="{{ route('raw_payment') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="booking_price" value="{{ $booking->booking_price }}">
+                                        <input type="hidden" name="tour_id" value="{{ $tour->id }}">
+                                        <input type="hidden" name="hotel_id" value="{{ $booking->hotel_id }}">
+                                        <input type="hidden" name="discount_id" value="{{ $booking->discount_id }}">
+                                        <input type="hidden" name="start_date" value="{{ $booking->start_date }}">
+                                        <input type="hidden" name="adult_number" value="{{ $booking->adult_number }}">
+                                        <input type="hidden" name="children_number" value="{{ $booking->children_number }}">
+                                        <input type="hidden" name="baby_number" value="{{ $booking->baby_number }}">
+                                        <input type="hidden" name="booking_person_name" value="{{ $booking->booking_person_name }}">
+                                        <input type="hidden" name="booking_person_phone" value="{{ $booking->booking_person_phone }}">
+                                        <input type="hidden" name="booking_person_email" value="{{ $booking->booking_person_email }}">
+                                        <button type="submit" class="btn btn-success">Thanh toán tại quầy</button>
                                     </form>
-                                    <button class="btn btn-success">Thanh toán tại quầy</button>
+
                                 </div>
                                 <br>
                                 <div class="shop_btn_wrapper shop_btn_wrapper_shipping">
-                                    <button class="btn btn-primary">Thanh toán PayPal</button>
+                                    {{-- <div id="paypal-button"></div> --}}
+                                    {{-- <input type="hidden" id="usd_to_vnd" value="{{ round($booking->booking_price / 23000, 2) }}"> --}}
+                                    <form action="/process-transaction" method="post">
+                                        @csrf
+                                        <input type="hidden" name="booking_price" value="{{ round($booking->booking_price / 23000, 2) }}">
+                                        <input type="hidden" name="tour_id" value="{{ $tour->id }}">
+                                        <input type="hidden" name="hotel_id" value="{{ $booking->hotel_id }}">
+                                        <input type="hidden" name="discount_id" value="{{ $booking->discount_id }}">
+                                        <input type="hidden" name="start_date" value="{{ $booking->start_date }}">
+                                        <input type="hidden" name="adult_number" value="{{ $booking->adult_number }}">
+                                        <input type="hidden" name="children_number" value="{{ $booking->children_number }}">
+                                        <input type="hidden" name="baby_number" value="{{ $booking->baby_number }}">
+                                        <input type="hidden" name="booking_person_name" value="{{ $booking->booking_person_name }}">
+                                        <input type="hidden" name="booking_person_phone" value="{{ $booking->booking_person_phone }}">
+                                        <input type="hidden" name="booking_person_email" value="{{ $booking->booking_person_email }}">
+                                        <button type="submit" class="btn btn-primary">Thanh toán Paypal</button>
+                                    </form>
                                 </div>
                                 <br>
                                 <div class="shop_btn_wrapper shop_btn_wrapper_shipping">
@@ -167,8 +191,8 @@
                                         @csrf
                                         <input type="hidden" name="booking_price" value="{{ $booking->booking_price }}">
                                         <input type="hidden" name="tour_id" value="{{ $tour->id }}">
-                                        <input type="hidden" name="hotel_id" value="{{ $tour->hotel_id }}">
-                                        <input type="hidden" name="discount_id" value="{{ $tour->discount_id }}">
+                                        <input type="hidden" name="hotel_id" value="{{ $booking->hotel_id }}">
+                                        <input type="hidden" name="discount_id" value="{{ $booking->discount_id }}">
                                         <input type="hidden" name="start_date" value="{{ $booking->start_date }}">
                                         <input type="hidden" name="adult_number" value="{{ $booking->adult_number }}">
                                         <input type="hidden" name="children_number" value="{{ $booking->children_number }}">
@@ -181,7 +205,21 @@
                                 </div>
                                 <br>
                                 <div class="shop_btn_wrapper shop_btn_wrapper_shipping">
-                                    <button class="btn btn-warning">Thanh toán VnPay</button>
+                                    <form action="{{ route('vnpay_payment') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="booking_price" value="{{ $booking->booking_price }}">
+                                        <input type="hidden" name="tour_id" value="{{ $tour->id }}">
+                                        <input type="hidden" name="hotel_id" value="{{ $booking->hotel_id }}">
+                                        <input type="hidden" name="discount_id" value="{{ $booking->discount_id }}">
+                                        <input type="hidden" name="start_date" value="{{ $booking->start_date }}">
+                                        <input type="hidden" name="adult_number" value="{{ $booking->adult_number }}">
+                                        <input type="hidden" name="children_number" value="{{ $booking->children_number }}">
+                                        <input type="hidden" name="baby_number" value="{{ $booking->baby_number }}">
+                                        <input type="hidden" name="booking_person_name" value="{{ $booking->booking_person_name }}">
+                                        <input type="hidden" name="booking_person_phone" value="{{ $booking->booking_person_phone }}">
+                                        <input type="hidden" name="booking_person_email" value="{{ $booking->booking_person_email }}">
+                                        <button type="submit" name="redirect" class="btn btn-warning">Thanh toán VnPay</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -197,4 +235,46 @@
 
 @section('scripts')
     <script src="{{ asset('assets/client/js/blog.js') }}"></script>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+    let paypalPrice = $('#usd_to_vnd').val()
+  paypal.Button.render({
+    // Configure environment
+    env: 'sandbox',
+    client: {
+      sandbox: 'demo_sandbox_client_id',
+      production: 'demo_production_client_id'
+    },
+    // Customize button (optional)
+    locale: 'en_US',
+    style: {
+      size: 'small',
+      color: 'gold',
+      shape: 'pill',
+    },
+
+    // Enable Pay Now checkout flow (optional)
+    commit: true,
+
+    // Set up a payment
+    payment: function(data, actions) {
+      return actions.payment.create({
+        transactions: [{
+          amount: {
+            total: paypalPrice,
+            currency: 'USD'
+          }
+        }]
+      });
+    },
+    // Execute the payment
+    onAuthorize: function(data, actions) {
+      return actions.payment.execute().then(function() {
+        // Show a confirmation message to the buyer
+        window.alert('Thank you for your purchase!');
+      });
+    }
+  }, '#paypal-button');
+
+</script>
 @endsection

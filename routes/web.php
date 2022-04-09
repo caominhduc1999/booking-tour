@@ -13,6 +13,7 @@ use App\Http\Controllers\PostTasksController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\TourGuideController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaypalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,10 +51,20 @@ Route::get('/register', [HomeController::class, 'getRegister'])->name('client_ge
 Route::post('/register', [HomeController::class, 'postRegister'])->name('client_post_register');
 Route::get('/logout', [HomeController::class, 'logout'])->name('client_get_logout');
 Route::get('/booking/{tourId}', [HomeController::class, 'booking'])->name('booking');
-Route::post('/booking/{tourId}', [HomeController::class, 'confirmBooking'])->name('confirm.booking');
+Route::post('/confirm-booking/{tourId}', [HomeController::class, 'confirmBooking'])->name('confirm.booking');
 Route::get('/get-discount/{code}', [HomeController::class, 'getDiscount']);
+Route::post('/raw-payment', [HomeController::class, 'rawPayment'])->name('raw_payment');
 Route::post('/momo-payment', [HomeController::class, 'momoPayment'])->name('momo_payment');
-Route::get('/complete-booking', [HomeController::class, 'completeBooking'])->name('complete_booking');
+Route::post('/vnpay-payment', [HomeController::class, 'vnpayPayment'])->name('vnpay_payment');
+Route::group(['middleware' => 'prevent-back-history'],function(){
+    Route::get('/complete-booking', [HomeController::class, 'completeBooking'])->name('complete_booking');
+});
+Route::get('/booking-history', [HomeController::class, 'bookingHistory'])->name('booking_history');
+
+Route::get('/create-transaction', [PayPalController::class, 'createTransaction'])->name('createTransaction');
+Route::post('/process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
+Route::get('/success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
+Route::get('/cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin_middleware'], function () {
     Route::get('/', [AdminController::class, 'index']);

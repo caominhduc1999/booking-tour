@@ -11,7 +11,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Danh sách tag</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('tags.index') }}">Danh sách tag</a></li>
                         <li class="breadcrumb-item active">Thêm tag</li>
                     </ol>
                 </div>
@@ -27,7 +27,7 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{ route('categories.store') }}" method="post">
+                <form action="{{ route('tags.store') }}" method="post">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">

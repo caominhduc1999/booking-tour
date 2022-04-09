@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\BookingRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\BookingInformation;
+use App\Models\Booking;
 use App\Services\ArticleService;
 use App\Services\BookingService;
 use App\Services\CategoryService;
@@ -15,6 +17,10 @@ use Illuminate\Http\Request;
 use App\Services\TourService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -83,7 +89,7 @@ class HomeController extends Controller
         } elseif (isset($request->search)) {
             $articles = $this->articleService->search($request->search, 6);
         } else {
-            $articles = $this->articleService->getPaginate(4);
+            $articles = $this->articleService->getPaginate(6);
         }
 
         return view('client.article_list', compact('articles', 'categories', 'latestArticles', 'tags'));
@@ -173,24 +179,8 @@ class HomeController extends Controller
 
     public function completeBooking(Request $request)
     {
-        if ($request->resultCode == '0')
-        {
-            $extraData = unserialize(urldecode($request->extraData));
-            $email = $extraData['email'];
+        // parse_str(explode('?', Session::all()['_previous']['url'] ?? [])[1] ?? [], $sessionData);
 
-            // send mail booking
-            return view('client.complete_booking', compact('email'));
-
-        } else {
-            $extraData = unserialize(urldecode($request->extraData));
-            $booking = $this->bookingService->find($extraData['booking_id']);
-            $booking->delete();
-            return redirect()->with('notify', 'Thanh toán thất bại.');
-        }
-    }
-
-    public function momoPayment(Request $request)
-    {
         $bookingData['tour_id'] = $request->tour_id;
         $bookingData['user_id'] = Auth::check() ? Auth::user()->id : null;
         $bookingData['hotel_id'] = $request->hotel_id;
@@ -206,11 +196,88 @@ class HomeController extends Controller
         $bookingData['discount_id'] = $request->discount_id;
         $bookingData['note'] = $request->note;
         $bookingData['status'] = 1;
-        $bookingData['payment_status'] = 1;
-        $bookingData['payment'] = 3;
 
-        $newBooking = $this->bookingService->store($bookingData);
+        if ((isset($request->resultCode) && $request->resultCode == '0')) // momo
+        {
+            $bookingData['payment_status'] = 3;
+            $bookingData['payment'] = 3;
+            $this->bookingService->store($bookingData);
+            $paymentMethod = 'Momo';
+            $email = $request->booking_person_email;
+            Mail::to($email)->send(new BookingInformation($bookingData));
 
+            return view('client.complete_booking', compact('email', 'paymentMethod'));
+        } 
+        elseif(isset($request->vnp_TransactionStatus) && $request->vnp_TransactionStatus == '00') { // vnpay
+            $vnpayBookingData = Session::get('vnpayBookingData');
+            // $vnpayBookingData['tour_id'] = ;
+            // $vnpayBookingData['user_id'] = ;
+            // $vnpayBookingData['hotel_id'] = $sessionData['hotel_id'] != "" ? $sessionData['hotel_id'] : null;
+            // $vnpayBookingData['booking_person_phone'] = $sessionData['booking_person_phone'];
+            // $vnpayBookingData['booking_person_name'] = $sessionData['booking_person_name'];
+            // $vnpayBookingData['booking_person_email'] = $sessionData['booking_person_email'];
+            // $vnpayBookingData['booking_person_address'] = $sessionData['booking_person_address'];
+            // $vnpayBookingData['total_price'] = $sessionData['booking_price'];
+            // $vnpayBookingData['start_date'] = $sessionData['start_date'];
+            // $vnpayBookingData['adult_number'] = $sessionData['adult_number'];
+            // $vnpayBookingData['children_number'] = $sessionData['children_number'];
+            // $vnpayBookingData['baby_number'] = $sessionData['baby_number'];
+            // $vnpayBookingData['discount_id'] = $sessionData['discount_id'] != "" ? $sessionData['discount_id'] : null;
+            // $vnpayBookingData['note'] = $sessionData['note'];
+            // $vnpayBookingData['status'] = 1;
+            $vnpayBookingData['payment_status'] = 3;
+            $vnpayBookingData['payment'] = 4;
+
+            $this->bookingService->store($vnpayBookingData);
+            $paymentMethod = 'Vnpay';
+            $email = $vnpayBookingData['booking_person_email'];
+            Session::forget('vnpayBookingData');
+            Mail::to($email)->send(new BookingInformation($vnpayBookingData));
+
+            return view('client.complete_booking', compact('email', 'paymentMethod'));
+        }
+        elseif(isset($request->PayerID)) {  // paypal
+            $bookingData['payment_status'] = 3;
+            $bookingData['payment'] = 2;
+            $this->bookingService->store($bookingData);
+            $paymentMethod = 'Paypal';
+            $email = $request->booking_person_email;
+            $email = $request->booking_person_email;
+            Mail::to($email)->send(new BookingInformation($bookingData));
+
+            return view('client.complete_booking', compact('email', 'paymentMethod'));
+        }
+        elseif(isset($request->is_raw)) {  // raw
+            $bookingData['payment_status'] = 1;
+            $bookingData['payment'] = 1;
+            $this->bookingService->store($bookingData);
+            $paymentMethod = null;
+            $email = $request->booking_person_email;
+            $email = $request->booking_person_email;
+            Mail::to($email)->send(new BookingInformation($bookingData));
+
+            return view('client.complete_booking', compact('email', 'paymentMethod'));
+        }
+        else {
+            // return redirect()->back()->with('notify', 'Thanh toán thất bại.');
+            $tour = $this->tourService->find($request->tour_id);
+            $booking = $request;
+            $hotel = $request->hotel_id ? $this->hotelService->find($request->hotel_id) : null;
+            return view('client.confirm_booking', compact('tour', 'booking', 'hotel'));
+        }
+    }
+
+    public function rawPayment(Request $request)
+    {
+        $request['is_raw'] = 'is_raw';
+
+        $redirectRoute = "http://localhost:8000/complete-booking" . "?" . http_build_query($request->all());
+        
+        return redirect($redirectRoute);
+    }
+
+    public function momoPayment(Request $request)
+    {
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
         $partnerCode = 'MOMOBKUN20180529';
         $accessKey = 'klm05TvNBzhg7h7j';
@@ -218,12 +285,9 @@ class HomeController extends Controller
         $orderInfo = "Thanh toán qua MoMo";
         $amount = $request->booking_price;
         $orderId = time() ."";
-        $redirectUrl = "http://localhost:8000/complete-booking";
+        $redirectUrl = "http://localhost:8000/complete-booking" . '?' . http_build_query($request->all());
         $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
-        $extraData = urlencode(serialize([
-            'booking_id' => $newBooking->id,
-            'email' => $request->booking_person_email
-        ]));
+        $extraData = "";
 
         $requestId = time() . "";
         $requestType = "payWithATM";
@@ -253,6 +317,97 @@ class HomeController extends Controller
         return redirect()->to($jsonResult['payUrl']);
     }
 
+    public function vnpayPayment(Request $request)
+    {
+        $sessionData['tour_id'] = $request->tour_id;
+        $sessionData['user_id'] = Auth::check() ? Auth::user()->id : null;
+        $sessionData['hotel_id'] = $request->hotel_id;
+        $sessionData['booking_person_phone'] = $request->booking_person_phone;
+        $sessionData['booking_person_name'] = $request->booking_person_name;
+        $sessionData['booking_person_email'] = $request->booking_person_email;
+        $sessionData['booking_person_address'] = $request->booking_person_address;
+        $sessionData['total_price'] = $request->booking_price;
+        $sessionData['start_date'] = $request->start_date;
+        $sessionData['adult_number'] = $request->adult_number;
+        $sessionData['children_number'] = $request->children_number;
+        $sessionData['baby_number'] = $request->baby_number;
+        $sessionData['discount_id'] = $request->discount_id;
+        $sessionData['note'] = $request->note;
+        $sessionData['status'] = 1;
+
+        Session::put('vnpayBookingData', $sessionData);
+        Session::save();
+
+        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+        $vnp_Returnurl = "http://localhost:8000/complete-booking";
+
+        $vnp_TmnCode = "LADRSDF4";//Mã website tại VNPAY 
+        $vnp_HashSecret = "YUTMYRBDOBVYLPOEIUNXDZHZYJROZMGG"; //Chuỗi bí mật
+
+        $vnp_TxnRef = time() .""; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        $vnp_OrderInfo = 'Thanh toan dat tour';
+        $vnp_OrderType = 'billpayment';
+        $vnp_Amount = $request->booking_price * 100;
+        $vnp_Locale = 'vn';
+        $vnp_BankCode = 'NCB';
+        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+        //Add Params of 2.0.1 Version
+    
+
+        $inputData = array(
+            "vnp_Version" => "2.1.0",
+            "vnp_TmnCode" => $vnp_TmnCode,
+            "vnp_Amount" => $vnp_Amount,
+            "vnp_Command" => "pay",
+            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CurrCode" => "VND",
+            "vnp_IpAddr" => $vnp_IpAddr,
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => $vnp_OrderInfo,
+            "vnp_OrderType" => $vnp_OrderType,
+            "vnp_ReturnUrl" => $vnp_Returnurl,
+            "vnp_TxnRef" => $vnp_TxnRef
+        );
+
+        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+            $inputData['vnp_BankCode'] = $vnp_BankCode;
+        }
+        if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
+            $inputData['vnp_Bill_State'] = $vnp_Bill_State;
+        }
+
+        //var_dump($inputData);
+        ksort($inputData);
+        $query = "";
+        $i = 0;
+        $hashdata = "";
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashdata .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
+
+        $vnp_Url = $vnp_Url . "?" . $query;
+
+        if (isset($vnp_HashSecret)) {
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//  
+            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        }
+        $returnData = array('code' => '00'
+            , 'message' => 'success'
+            , 'data' => $vnp_Url);
+            if (isset($_POST['redirect'])) {
+                header('Location: ' . $vnp_Url);
+                die();
+            } else {
+                echo json_encode($returnData);
+            }
+    }
+
     public function execPostRequest($url, $data)
     {
         $ch = curl_init($url);
@@ -270,5 +425,12 @@ class HomeController extends Controller
         //close connection
         curl_close($ch);
         return $result;
+    }
+
+    public function bookingHistory()
+    {
+        $bookings = Booking::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+
+        return view('client.history', compact('bookings'));
     }
 }

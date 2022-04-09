@@ -149,6 +149,11 @@
                                                         Trạng thái</th>
                                                     <th class="sorting" tabindex="0" aria-controls="example1"
                                                         rowspan="1" colspan="1"
+                                                        aria-label="Platform(s): activate to sort column ascending"
+                                                        style="width: 10%;">
+                                                        HTTT</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="example1"
+                                                        rowspan="1" colspan="1"
                                                         aria-label="Action: activate to sort column ascending"
                                                         style="width: 30%;">Thao tác
                                                     </th>
@@ -165,6 +170,22 @@
                                                         <td>{{ $booking->booking_date }}</td>
                                                         <td>{{ $booking->start_date }}</td>
                                                         <td>{{ $booking->status == 1 ? 'Chờ xác nhận' : 'Đã xác nhận' }}</td>
+                                                        @switch($booking->payment)
+                                                            @case(1)
+                                                                <td>TT tại quầy</td>
+                                                                @break
+                                                            @case(2)
+                                                                <td>Paypal</td>
+                                                                @break
+                                                            @case(3)
+                                                                <td>Momo</td>
+                                                                @break
+                                                            @case(4)
+                                                                <td>Vnpay</td>
+                                                                @break
+                                                            @default
+                                                                <span></span>
+                                                        @endswitch
                                                         <td class="d-flex">
                                                             <a href="{{ route('bookings.edit', $booking->id) }}"
                                                                 class="mr-2">

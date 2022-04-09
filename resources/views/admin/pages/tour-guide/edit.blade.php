@@ -51,7 +51,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Địa chỉ</label>
-                            <textarea class="form-control" name="address" id="local-upload" cols="30" rows="10">{!! old('address') ?? $tourGuide->address !!}</textarea>
+                            <input type="text" class="form-control" name="address" value="{{ old('address') ?? $tourGuide->address }}" id="exampleInputEmail1" placeholder="Địa chỉ">
                             @error('address')
                                 <div class="text-danger">
                                     {{ $message }}

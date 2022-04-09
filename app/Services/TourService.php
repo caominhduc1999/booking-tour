@@ -58,7 +58,7 @@ class TourService {
             $oldImage = 'images/' . $tour->image;
 
             if (isset($data['image'])) {
-                if (file_exists($oldImage)) {
+                if (file_exists($oldImage) && !is_dir($oldImage)) {
                     unlink($oldImage);
                 }
                 $image = rand() . '.' . $data['image']->getClientOriginalExtension();
@@ -83,9 +83,9 @@ class TourService {
     {
         try {
             $tour = $this->tourRepository->findOrFail($id);
-            $tour->tags()->detach();
+            // $tour->tags()->detach();
             $oldImage = 'images/' . $tour->image;
-            if (file_exists($oldImage)) {
+            if (file_exists($oldImage) && !is_dir($oldImage)) {
                 unlink($oldImage);
             }
             $tour->delete();

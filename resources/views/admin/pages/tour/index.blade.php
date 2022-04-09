@@ -63,13 +63,13 @@
                                         <select class="form-control" name="type" id="">
                                             <option value="">Loại tour</option>
                                             <option value="1" @if(request()->type == 1) selected @endif>Trong nước</option>
-                                            <option value="2" @if(request()->type == 2) selected @endif>Ngoài nước</option>
+                                            <option value="2" @if(request()->type == 2) selected @endif>Quốc tế</option>
                                         </select>
                                     </div>
                                     <div class="col-2">
                                         <select class="form-control" name="frequency" id="">
                                             <option value="">Tần suất</option>
-                                            <option value="1" @if(request()->frequency == 1) selected @endif>Hằng ngày</option>
+                                            <option value="1" @if(request()->frequency == 1) selected @endif>Hàng tuần</option>
                                             <option value="2" @if(request()->frequency == 2) selected @endif>Liên hệ</option>
                                         </select>
                                     </div>
@@ -220,8 +220,8 @@
                                                         </td>
                                                         <td>{{ $tour->name }}</td>
                                                         <td>{{ $tour->code }}</td>
-                                                        <td>{{ $tour->type == 1 ? 'Trong nước' : 'Nước ngoài' }}</td>
-                                                        <td>{{ $tour->frequency == 1 ? 'Hằng ngày' : 'Liên hệ' }}</td>
+                                                        <td>{{ $tour->type == 1 ? 'Trong nước' : 'Quốc tế' }}</td>
+                                                        <td>{{ $tour->frequency == 1 ? 'Hàng tuần' : 'Liên hệ' }}</td>
                                                         <td>{{ $tour->people_limit }}</td>
                                                         <td>{{ $tour->days }}</td>
                                                         <td class="d-flex">

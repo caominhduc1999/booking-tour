@@ -56,7 +56,7 @@
                         </div>
                         <div class="blog-content">
                             <header class="entry-header">
-                                <h1 class="entry-title" style="font-size: 32px;">{{ $tour->name }}</h1>
+                                <h1 class="" style="font-size: 32px;">{{ $tour->name }}</h1>
                                 <div class="entry-meta">
                                     <ul>
                                         <li><span class="posted-date"><a href="#">{{ $tour->created_at->format('d-m-Y') }}</a></span>
@@ -74,7 +74,7 @@
                                     <span class="badge badge-primary">Loại tour: {{ $tour->type == 1 ? 'Trong nước' : 'Quốc tế' }}</span>
                                 </div>
                                 <div class="col-md-4">
-                                    <span class="badge badge-primary">Tần suất: {{ $tour->frequency == 1 ? 'Hàng ngày' : 'Liên hệ' }}</span>
+                                    <span class="badge badge-primary">Tần suất: {{ $tour->frequency == 1 ? 'Hàng tuần' : 'Liên hệ' }}</span>
                                 </div>
                                
                             </div>

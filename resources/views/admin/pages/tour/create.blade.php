@@ -90,7 +90,7 @@
                                     <select class="form-control" name="type" id="">
                                         <option value="" selected></option>
                                         <option value="1" @if(old('type') == 1) selected @endif>Trong nước</option>
-                                        <option value="2" @if(old('type') == 2) selected @endif>Ngoài nước</option>
+                                        <option value="2" @if(old('type') == 2) selected @endif>Quốc tế</option>
                                     </select>
                                     @error('type')
                                         <div class="text-danger">
@@ -104,7 +104,7 @@
                                     <label for="exampleInputEmail1">Tần suất</label>
                                     <select class="form-control" name="frequency" id="">
                                         <option value=""></option>
-                                        <option value="1" @if(old('frequency') == 1) selected @endif>Hằng ngày</option>
+                                        <option value="1" @if(old('frequency') == 1) selected @endif>Hàng tuần</option>
                                         <option value="2" @if(old('frequency') == 2) selected @endif>Liên hệ</option>
                                     </select>
                                     @error('frequency')

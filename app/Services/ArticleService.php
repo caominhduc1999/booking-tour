@@ -58,7 +58,7 @@ class ArticleService {
             $oldImage = 'images/' . $article->image;
 
             if (isset($data['image'])) {
-                if (file_exists($oldImage)) {
+                if (file_exists($oldImage) && !is_dir($oldImage)) {
                     unlink($oldImage);
                 }
                 $image = rand() . '.' . $data['image']->getClientOriginalExtension();
@@ -85,7 +85,7 @@ class ArticleService {
             $article = $this->articleRepository->findOrFail($id);
             $article->tags()->detach();
             $oldImage = 'images/' . $article->image;
-            if (file_exists($oldImage)) {
+            if (file_exists($oldImage) && !is_dir($oldImage)) {
                 unlink($oldImage);
             }
             $article->delete();

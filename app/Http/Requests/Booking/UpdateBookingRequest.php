@@ -32,7 +32,7 @@ class UpdateBookingRequest extends FormRequest
             'booking_person_phone' => 'required',
             'booking_person_name' => 'required',
             'booking_person_email' => 'required',
-            'booking_person_address' => 'required',
+            'booking_person_address' => 'nullable',
             'payment' => 'required',
         ];
     }

@@ -51,8 +51,8 @@
                             <label for="frequency">Tần suất</label>
                             <select name="" id="" class="form-control">
                                 <option value=""></option>
-                                <option value="1" @if(request()->frequency == 1) selected @endif>Hàng ngày</option>
-                                <option value="2" @if(request()->frequency == 1) selected @endif>Liên hệ</option>
+                                <option value="1" @if(request()->frequency == 1) selected @endif>Hàng tuần</option>
+                                <option value="2" @if(request()->frequency == 2) selected @endif>Liên hệ</option>
                             </select>
 
                             <br>
@@ -115,7 +115,7 @@
                             <label for="frequency">Tần suất</label>
                             <select name="" id="" class="form-control">
                                 <option value=""></option>
-                                <option value="1" @if(request()->frequency == 1) selected @endif>Hàng ngày</option>
+                                <option value="1" @if(request()->frequency == 1) selected @endif>Hàng tuần</option>
                                 <option value="2" @if(request()->frequency == 1) selected @endif>Liên hệ</option>
                             </select>
 

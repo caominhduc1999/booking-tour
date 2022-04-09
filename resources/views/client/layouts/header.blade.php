@@ -122,12 +122,14 @@
                                     Danh sách Tours
                                 </a>
                             </li>
-                            <li class="active dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    Lịch sử đặt tour
-                                </a>
-                            </li>
+                            @if(\Auth::check() && \Auth::user()->role == 2)
+                                <li class="active dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Lịch sử đặt tour
+                                    </a>
+                                </li>
+                            @endif
                             <!-- /.Cart Option -->
                         </ul>
 

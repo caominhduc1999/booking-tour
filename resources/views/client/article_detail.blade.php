@@ -56,14 +56,14 @@
                     <div class="sidebar_widget">
                         <h4>Bài viết mới nhất</h4>
                         <div class="latest_post_wrapper">
-                            @foreach($latestArticles as $article)
+                            @foreach($latestArticles as $latestArticle)
                                 <div class="blog_wrapper1">
                                     <div class="blog_image">
-                                        <img src="{{ $article->image ? URL::asset('storage/images/' . $article->image) : '/assets/images/default.jpg' }}" class="img-responsive" alt="blog_img1" />
+                                        <img src="{{ $latestArticle->image ? URL::asset('storage/images/' . $latestArticle->image) : '/assets/images/default.jpg' }}" class="img-responsive" alt="blog_img1" />
                                     </div>
                                     <div class="blog_text">
-                                        <h5><a href="{{ route('client.articles.detail', $article->id) }}">{{ $article->title }}</a></h5>
-                                        <div class="blog_date"><i class="fa fa-calendar-o" aria-hidden="true"></i>{{ $article->created_at->format('d-m-Y') }}</div>
+                                        <h5><a href="{{ route('client.articles.detail', $latestArticle->id) }}">{{ $latestArticle->title }}</a></h5>
+                                        <div class="blog_date"><i class="fa fa-calendar-o" aria-hidden="true"></i>{{ $latestArticle->created_at->format('d-m-Y') }}</div>
                                     </div>
                                 </div>
                             @endforeach

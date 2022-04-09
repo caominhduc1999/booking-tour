@@ -27,13 +27,13 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{ route('categories.update', $category->id) }}" method="post">
+                <form action="{{ route('tags.update', $tag->id) }}" method="post">
                     @method('put')
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên tag</label>
-                            <input type="text" class="form-control" name="name" value="{{ old('name') ?? $category->name }}" id="exampleInputEmail1" placeholder="Tên tag">
+                            <input type="text" class="form-control" name="name" value="{{ old('name') ?? $tag->name }}" id="exampleInputEmail1" placeholder="Tên tag">
                             @error('name')
                                 <div class="text-danger">
                                     {{ $message }}

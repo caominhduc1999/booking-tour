@@ -96,7 +96,7 @@
 
                 <div class="col-lg-9 col-md-8 col-sm-7 col-xs-12">
                     <div class="row">
-                        @foreach($articles as $article)
+                        @forelse($articles as $article)
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                 <article class="blog-post-wrapper clearfix">
                                     <div class="post-thumbnail">
@@ -112,7 +112,7 @@
 
                                     <div class="blog-content">
                                         <header class="entry-header">
-                                            <h4 class="entry-title"><a href="{{ route('client.articles.detail', $article->id) }}">{{ $article->title }}</a></h4>
+                                            <h4 class="entry-title"><a href="{{ route('client.articles.detail', $article->id) }}">{{ \Str::limit($article->title, 70, $end='...') }}</a></h4>
                                         </header>
                                         <!-- /.entry-header -->
 
@@ -137,7 +137,9 @@
                                     <!-- /.entry-footer -->
                                 </article>
                             </div>
-                        @endforeach
+                        @empty
+                            <h1 style="text-align: center;">Không tìm thấy bài viết nào.</div>
+                        @endforelse
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; justify-content: center;">
                             <!-- blog_pagination_section start -->
                                 {{ $articles->links() }}

@@ -36,6 +36,11 @@ class Booking extends Model
     // 3 - momo
     // 4 - vnpay
 
+    // payment status
+    // 1 - chua thanh toan
+    // 2 - da dat coc
+    // 3 - da thanh toan
+    
     public function tour()
     {
         return $this->belongsTo(Tour::class);

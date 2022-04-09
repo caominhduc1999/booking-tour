@@ -184,10 +184,11 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Hình thức thanh toán</label>
-                            <select class="form-control" name="payment" id="">
-                                <option value="1" @if(old('payment') ? old('payment') == 1 : $booking->payment == 1) selected @endif>Tiền mặt</option>
-                                <option value="2" @if(old('payment') ? old('payment') == 2 : $booking->payment == 2) selected @endif>Stripe</option>
-                                <option value="3" @if(old('payment') ? old('payment') == 3 : $booking->payment == 3) selected @endif>Momo</option>
+                            <select class="form-control" name="payment" id="" readonly>
+                                <option value="1" @if((old('payment') ? old('payment') == 1 : $booking->payment) == 1) selected @endif>Tiền mặt</option>
+                                <option value="2" @if((old('payment') ? old('payment') == 2 : $booking->payment) == 2) selected @endif>Paypal</option>
+                                <option value="3" @if((old('payment') ? old('payment') == 3 : $booking->payment) == 3) selected @endif>Momo</option>
+                                <option value="3" @if((old('payment') ? old('payment') == 4 : $booking->payment) == 4) selected @endif>Vnpay</option>
                             </select>
                             @error('payment')
                                 <div class="text-danger">

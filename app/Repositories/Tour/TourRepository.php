@@ -116,6 +116,7 @@ class TourRepository extends RepositoryAbstract implements TourRepositoryInterfa
             ->when(isset($conditions['to_days']), function($q) use ($conditions) {
                 return $q->where('days', '<=', $conditions['to_days']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }

@@ -182,7 +182,7 @@
                                         <select name="hotel_id" id="hotel-selection" class="form-control">
                                             <option value="">Tự tìm khách sạn</option>
                                             @foreach ($tour->hotels as $hotel)
-                                                <option value="{{ $hotel->id }}" @if(old('hotel_id') == $hotel->id) selected @endif data-value="{{ $hotel }}">{{ $hotel->name }}</option>
+                                                <option value="{{ $hotel->id }}" @if(old('hotel_id') == $hotel->id) selected @endif data-value="{{ $hotel }}">{{ $hotel->name . ' (' . 'Giá tiền:' . number_format($hotel->price_per_day) . ' VNĐ/Ngày - ' . number_format($hotel->price_per_night) . ' VNĐ/đêm)' }}</option>
                                             @endforeach
                                         </select>
                                         @error('hotel_id')

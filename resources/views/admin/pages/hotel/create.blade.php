@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Địa chỉ</label>
-                            <textarea class="form-control" name="address" id="local-upload" cols="30" rows="10">{!! old('address') !!}</textarea>
+                            <input type="text" class="form-control" name="address" id="exampleInputEmail1" placeholder="Địa chỉ" value="{{ old('address') }}">
                             @error('address')
                                 <div class="text-danger">
                                     {{ $message }}
