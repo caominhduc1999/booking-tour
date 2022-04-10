@@ -60,11 +60,15 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
     Route::get('/complete-booking', [HomeController::class, 'completeBooking'])->name('complete_booking');
 });
 Route::get('/booking-history', [HomeController::class, 'bookingHistory'])->name('booking_history');
+Route::get('/get-remain-slot', [HomeController::class, 'getRemainSlot'])->name('get_remain_slot');
+Route::get('/profile', [HomeController::class, 'getProfile'])->name('get_profile');
+Route::post('/profile/update', [HomeController::class, 'updateProfile'])->name('update_profile');
 
 Route::get('/create-transaction', [PayPalController::class, 'createTransaction'])->name('createTransaction');
 Route::post('/process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
 Route::get('/success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
 Route::get('/cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
+
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin_middleware'], function () {
     Route::get('/', [AdminController::class, 'index']);

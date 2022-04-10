@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Booking;
+use App\Models\Tour;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BookingRequest extends FormRequest
@@ -21,8 +24,19 @@ class BookingRequest extends FormRequest
      *
      * @return array
      */
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'people_limit' => (request()->adult_number ?? 0) + (request()->children_number) + (request()->baby_number ?? 0),
+        ]);
+    }
+
     public function rules()
     {
+        $tourSlot = Tour::find(request()->tour_id)->people_limit;
+        $placedSlot = Booking::whereDate('start_date', Carbon::createFromFormat('d/m/Y', request()->start_date)->format('Y-m-d'))->where('tour_id', request()->tour_id)->count();
+        $remainSlot = $tourSlot - $placedSlot;
+
         return [
             'start_date' => 'required',
             'adult_number' => 'required|min:0',
@@ -31,11 +45,16 @@ class BookingRequest extends FormRequest
             'booking_person_name' => 'required',
             'booking_person_phone' => 'required',
             'booking_person_email' => 'required|email',
+            'people_limit' => 'numeric|max:' . $remainSlot
         ];
     }
 
     public function messages()
     {
+        $tourSlot = Tour::find(request()->tour_id)->people_limit;
+        $placedSlot = Booking::whereDate('start_date', Carbon::createFromFormat('d/m/Y', request()->start_date)->format('Y-m-d'))->where('tour_id', request()->tour_id)->count();
+        $remainSlot = $tourSlot - $placedSlot;
+
         return [
             'start_date.required' => 'Vui lòng nhập ngày khởi hành',
             'adult_number.required' => 'Vui lòng nhập số lượng người lớn',
@@ -48,6 +67,7 @@ class BookingRequest extends FormRequest
             'booking_person_phone.required' => 'Vui lòng nhập SĐT',
             'booking_person_email.required' => 'Vui lòng nhập email',
             'booking_person_email.email' => 'Email không hợp lệ',
+            'people_limit.max' => 'Lịch khởi hành bạn chọn chỉ còn ' . $remainSlot . ' chỗ'
         ];
     }
 }

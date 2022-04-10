@@ -401,6 +401,28 @@ crossorigin="anonymous"></script>
                     let itemDate = new Date(formatItemDate)
                     if (itemDate > currentDate) {
                         validDepartureDateArray.push(item)
+                        // $.ajax({
+                        //     type: "GET",
+                        //     url: '/get-remain-slot',
+                        //     data: {
+                        //         tour_id: tourData.id,
+                        //         start_date: item
+                        //     }, // serializes the form's elements.
+                        //     success: function(data)
+                        //     {
+                        //         remainSlot = data.remain_slot
+                        //         validDepartureDateArray.push({
+                        //             'date': item,
+                        //             'remain_slot': remainSlot
+                        //         });
+
+                        //         let html = ''
+                        //         validDepartureDateArray.forEach(function(item) {
+                        //             html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
+                        //         })
+                        //         $('#validDepartureDateArray').html(html)
+                        //     }
+                        // });
                     }
                 })
                 let html = ''
@@ -424,7 +446,7 @@ crossorigin="anonymous"></script>
                 };
     
                 $.datepicker.setDefaults($.datepicker.regional['vi']);
-                
+                $('#my_date_picker').datepicker('destroy');
                 $("#my_date_picker").datepicker({
                     dateFormat: 'dd/mm/yy',
                     beforeShowDay: function(date) {

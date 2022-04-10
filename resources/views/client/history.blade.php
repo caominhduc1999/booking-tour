@@ -3,6 +3,11 @@
     <!-- Style Css -->
     <link href="{{ asset('assets/client/css/shop.css') }}" rel="stylesheet">
     <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+    <style>
+        .container {
+            width: 1480px !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -11,13 +16,13 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-8 col-xs-12 col-sm-6">
-                <h1> Shopping Cart </h1>
+                <h1> Lịch sử đặt tour </h1>
             </div>
             <div class="col-lg-4 col-md-4 col-xs-12 col-sm-6">
                 <div class="sub_title_section">
                     <ul class="sub_title">
-                        <li> <a href="#"> Home </a> <i class="fa fa-angle-right" aria-hidden="true"></i> </li>
-                        <li> Shopping Cart  </li>
+                        <li> <a href="/"> Home </a> <i class="fa fa-angle-right" aria-hidden="true"></i> </li>
+                        <li> Lịch sử đặt tour  </li>
                     </ul>
                 </div>
             </div>
@@ -32,7 +37,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="btc_shop_single_prod_right_section shop_product_single_head related_pdt_shop_head">
-                    <h1>Your cart Products (04)</h1>
+                    <h1>Thông tin tour đã đặt:</h1>
                 </div>
             </div>
             <div class="shop_cart_page_wrapper">

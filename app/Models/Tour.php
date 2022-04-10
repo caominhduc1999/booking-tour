@@ -24,7 +24,7 @@ class Tour extends Model
         'is_feature',
         'people_limit',
         'days',
-        'noghts',
+        'nights',
         'adult_price',
         'children_price',
         'baby_price',

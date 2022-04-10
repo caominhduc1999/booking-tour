@@ -86,6 +86,7 @@
                             <br>
                             <form action="{{ route('confirm.booking', $tour->id) }}" id="booking-form" method="post">
                                 @csrf
+                                <input type="hidden" name="tour_id" value="{{ $tour->id }}">
                                 <div class="row" style="margin-left: 0px;">
                                     <label>Ngày khởi hành</label>
                                     <br>
@@ -121,6 +122,13 @@
                                         <label for="">Số lượng trẻ nhỏ (dưới 6 tuổi)</label>
                                         <input type="number" name="baby_number" min="0" class="form-control price-person" value="{{ old('baby_number') }}">
                                         @error('baby_number')
+                                            <div class="text-danger">
+                                                {{ $message }}
+                                            </div>    
+                                        @enderror
+                                    </div>
+                                    <div style="margin-left: 15px;">
+                                        @error('people_limit')
                                             <div class="text-danger">
                                                 {{ $message }}
                                             </div>    
@@ -284,20 +292,56 @@
         let departureDate = '{{ $tour->departure_date }}'
         let departureDateArray = departureDate.split(',')
         let validDepartureDateArray = [];
+        
         departureDateArray.forEach(function(item) {
             let selectItemDate = item.split('/')
             let formatItemDate = `${selectItemDate[1]}/${selectItemDate[0]}/${selectItemDate[2]}`
             let currentDate = new Date()
             let itemDate = new Date(formatItemDate)
+            let remainSlot = ''
             if (itemDate > currentDate) {
-                validDepartureDateArray.push(item)
+                 // calculate remain slot
+                $.ajax({
+                    type: "GET",
+                    url: '/get-remain-slot',
+                    data: {
+                        tour_id: '{{ $tour->id }}',
+                        start_date: item
+                    }, // serializes the form's elements.
+                    success: function(data)
+                    {
+                        remainSlot = data.remain_slot
+                        validDepartureDateArray.push({
+                            'date': item,
+                            'remain_slot': remainSlot
+                        });
+
+                        let html = ''
+                        validDepartureDateArray.forEach(function(item) {
+                            html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
+                        })
+                        $('#validDepartureDateArray').html(html)
+                    }
+                });
             }
         })
-        let html = ''
-        validDepartureDateArray.forEach(function(item) {
-            html += `<label>${item}</label><br>`
-        })
-        $('#validDepartureDateArray').html(html)
+
+        $.datepicker.regional['vi'] = {
+            monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            monthNamesShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+            dayNames: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+            dayNamesShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+            dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['vi']);
+
 
         $(document).ready(function() {
             localStorage.removeItem('discountRate')
@@ -307,7 +351,6 @@
             calculateDiscountPrice(localStorage.getItem('discountRate') != null ? localStorage.getItem('discountRate') : null)
             calculateHotelPrice()
             calculateWholePrice()
-
             $("#my_date_picker").datepicker({
                 dateFormat: 'dd/mm/yy',
                 beforeShowDay: function(date) {
@@ -428,6 +471,7 @@
                     success: function(data)
                     {
                         if (data.status) {
+                            console.log(data)
                             localStorage.setItem('discountRate', data.discount_rate ? data.discount_rate : null)
                             $('#discount-id').val(data.id ? data.id : null)
                             $('#discount-notify').html('<div style="color: green;">Áp dụng mã giảm giá thành công. Bạn được giảm giá ' + ((data.discount_rate) * 100) + '%</div>')

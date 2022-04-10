@@ -99,7 +99,7 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="container">
                     <div class="navbar-header hidden-xs hidden-sm">
-                        <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt=""></a>
+                        <a class="navbar-brand" href="index.html"><img src="" alt=""></a>
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse">
@@ -124,7 +124,7 @@
                             </li>
                             @if(\Auth::check() && \Auth::user()->role == 2)
                                 <li class="active dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                    <a href="{{ route('booking_history') }}" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                         aria-haspopup="true" aria-expanded="false">
                                         Lịch sử đặt tour
                                     </a>
@@ -144,7 +144,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
-                            <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt=""></a>
+                            <a class="navbar-brand" href="index.html"><img src="" alt=""></a>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
                             <button type="button" class="navbar-toggle collapsed" aria-expanded="false">
@@ -158,7 +158,7 @@
                 </div>
             </div>
             <div id="sidebar">
-                <a class="sidebar_logo" href="index.html"><img src="images/logo.png" alt=""></a>
+                <a class="sidebar_logo" href="index.html"><img src="" alt=""></a>
                 <div id="toggle_close">&times;</div>
                 <div id='cssmenu'>
                     <ul>

@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6">
                     <div class="wrapper_first_image">
-                        <img src="images/logo_light.png" class="img-responsive" alt="footer3_logo_img" />
+                        <img src="" class="img-responsive" alt="footer3_logo_img" />
                     </div>
                 </div>
                 <div class="col-sm-6 visible-sm">
@@ -90,7 +90,7 @@
                         <h4>From the Blog</h4>
                         <div class="blog_wrapper1">
                             <div class="blog_image">
-                                <img src="images/home/home-2/blog-img1.png" class="img-responsive"
+                                <img src="" class="img-responsive"
                                     alt="blog-img1_img" />
                             </div>
                             <div class="blog_text">
@@ -101,7 +101,7 @@
                         </div>
                         <div class="blog_wrapper2">
                             <div class="blog_image">
-                                <img src="images/home/home-2/blog-img2.png" class="img-responsive"
+                                <img src="" class="img-responsive"
                                     alt="blog-img2_img" />
                             </div>
                             <div class="blog_text">

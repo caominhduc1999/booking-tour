@@ -33,12 +33,13 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tour</label>
-                            <select class="form-control" name="tour_id" id="tour-selection">
+                            <select class="form-control" name="" id="tour-selection" disabled>
                                 <option value=""></option>
                                 @foreach($tours as $tour)
                                     <option value="{{ $tour->id }}" @if(old('tour_id') ? old('tour_id') == $tour->id : $booking->tour_id == $tour->id) selected @endif data-value="{{ $tour }}">{{ $tour->name }}</option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="tour_id" value="{{ $booking->tour_id }}">
                             @error('tour_id')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -48,7 +49,7 @@
                         
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_name" id="booking_person_name" readonly placeholder="Tên người đặt" value="{{ old('booking_person_name', $booking->booking_person_name) }}">
+                            <input type="text" class="form-control" name="booking_person_name" id="booking_person_name" disabled placeholder="Tên người đặt" value="{{ old('booking_person_name', $booking->booking_person_name) }}">
                             @error('booking_person_name')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -57,7 +58,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">SĐT người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_phone" id="booking_person_phone" readonly placeholder="SĐT người đặt" value="{{ old('booking_person_phone', $booking->booking_person_phone) }}">
+                            <input type="text" class="form-control" name="booking_person_phone" id="booking_person_phone" disabled placeholder="SĐT người đặt" value="{{ old('booking_person_phone', $booking->booking_person_phone) }}">
                             @error('booking_person_phone')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -66,7 +67,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_email" id="booking_person_email" readonly placeholder="Email người đặt" value="{{ old('booking_person_email', $booking->booking_person_email) }}">
+                            <input type="text" class="form-control" name="booking_person_email" id="booking_person_email" disabled placeholder="Email người đặt" value="{{ old('booking_person_email', $booking->booking_person_email) }}">
                             @error('booking_person_email')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -75,7 +76,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Địa chỉ người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_address" id="booking_person_address" readonly placeholder="Địa chỉ người đặt" value="{{ old('booking_person_address', $booking->booking_person_address) }}">
+                            <input type="text" class="form-control" name="booking_person_address" id="booking_person_address" disabled placeholder="Địa chỉ người đặt" value="{{ old('booking_person_address', $booking->booking_person_address) }}">
                             @error('booking_person_address')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -96,7 +97,8 @@
                                 <div class="col-md-6">
                                     <label for="exampleInputEmail1">Ngày khởi hành</label>
                                     {{-- <input type="date" class="form-control" name="start_date" id="exampleInputEmail1" placeholder="Ngày khởi hành" value="{{ old('start_date') }}"> --}}
-                                    <input type="text" name="start_date" id="my_date_picker" value="{{ old('start_date', \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y')) }}">
+                                    {{-- <input readonly type="text" name="start_date" id="my_date_picker" value="{{ old('start_date', \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y')) }}"> --}}
+                                    <input type="text" name="start_date" value="{{ old('start_date', \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y')) }}" disabled>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Lịch khởi hành sắn có</label>
@@ -111,7 +113,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng người lớn</label>
-                            <input type="number" class="form-control price" name="adult_number" id="exampleInputEmail1" placeholder="Số lượng người lớn" value="{{ old('adult_number', $booking->adult_number) }}">
+                            <input disabled type="number" class="form-control price" name="adult_number" id="exampleInputEmail1" placeholder="Số lượng người lớn" value="{{ old('adult_number', $booking->adult_number) }}">
                             @error('adult_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -120,7 +122,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng trẻ em</label>
-                            <input type="number" class="form-control price" name="children_number" id="exampleInputEmail1" placeholder="Số lượng trẻ em" value="{{ old('children_number', $booking->children_number) }}">
+                            <input disabled type="number" class="form-control price" name="children_number" id="exampleInputEmail1" placeholder="Số lượng trẻ em" value="{{ old('children_number', $booking->children_number) }}">
                             @error('children_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -129,7 +131,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng trẻ sơ sinh</label>
-                            <input type="number" class="form-control price" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number', $booking->baby_number) }}">
+                            <input disabled type="number" class="form-control price" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number', $booking->baby_number) }}">
                             @error('baby_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -138,7 +140,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Khách sạn</label>
-                            <select class="form-control" name="hotel_id" id="hotel_id">
+                            <select class="form-control" name="hotel_id" id="hotel_id" disabled>
                                 <option value=""></option>
                                 @foreach($hotels as $hotel)
                                     <option value="{{ $hotel->id }}" data-value="{{ $hotel }}" @if(old('hotel_id') ? old('hotel_id') == $hotel->id : $booking->hotel_id == $hotel->id) selected @endif >{{ $hotel->name }}</option>
@@ -184,7 +186,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Hình thức thanh toán</label>
-                            <select class="form-control" name="payment" id="" readonly>
+                            <select class="form-control" name="payment" id="" disabled>
                                 <option value="1" @if((old('payment') ? old('payment') == 1 : $booking->payment) == 1) selected @endif>Tiền mặt</option>
                                 <option value="2" @if((old('payment') ? old('payment') == 2 : $booking->payment) == 2) selected @endif>Paypal</option>
                                 <option value="3" @if((old('payment') ? old('payment') == 3 : $booking->payment) == 3) selected @endif>Momo</option>
@@ -200,7 +202,7 @@
                             <label for="exampleInputEmail1">Trạng thái thanh toán</label>
                             <select class="form-control" name="payment_status" id="">
                                 <option value="1" @if(old('payment_status') ? old('payment_status') == 1 : $booking->payment_status == 1) selected @endif>Chưa thanh toán</option>
-                                <option value="2" @if(old('payment_status') ? old('payment_status') == 2 : $booking->payment_status == 2) selected @endif>Đã đặt cọc</option>
+                                {{-- <option value="2" @if(old('payment_status') ? old('payment_status') == 2 : $booking->payment_status == 2) selected @endif>Đã đặt cọc</option> --}}
                                 <option value="3" @if(old('payment_status') ? old('payment_status') == 3 : $booking->payment_status == 3) selected @endif>Đã thanh toán</option>
                             </select>
                             @error('payment_status')
@@ -249,6 +251,7 @@ crossorigin="anonymous"></script>
                 
                 var tourData = optionSelected[0].dataset.value != undefined ? JSON.parse(optionSelected[0].dataset.value) : null;
                 calculateTotalPrice(tourData)
+                getDepartureDate()
                 calculateHotelPrice()
                 // calculateTotalPriceAfterDiscount()
             })
@@ -359,6 +362,28 @@ crossorigin="anonymous"></script>
                     let itemDate = new Date(formatItemDate)
                     if (itemDate > currentDate) {
                         validDepartureDateArray.push(item)
+                        // $.ajax({
+                        //     type: "GET",
+                        //     url: '/get-remain-slot',
+                        //     data: {
+                        //         tour_id: '{{ $tour->id }}',
+                        //         start_date: item
+                        //     }, // serializes the form's elements.
+                        //     success: function(data)
+                        //     {
+                        //         remainSlot = data.remain_slot
+                        //         validDepartureDateArray.push({
+                        //             'date': item,
+                        //             'remain_slot': remainSlot
+                        //         });
+
+                        //         let html = ''
+                        //         validDepartureDateArray.forEach(function(item) {
+                        //             html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
+                        //         })
+                        //         $('#validDepartureDateArray').html(html)
+                        //     }
+                        // });
                     }
                 })
                 let html = ''
@@ -382,7 +407,7 @@ crossorigin="anonymous"></script>
                 };
     
                 $.datepicker.setDefaults($.datepicker.regional['vi']);
-                
+                $('#my_date_picker').datepicker('destroy');
                 $("#my_date_picker").datepicker({
                     dateFormat: 'dd/mm/yy',
                     beforeShowDay: function(date) {

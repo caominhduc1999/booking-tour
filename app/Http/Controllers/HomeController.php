@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\BookingRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Mail\BookingInformation;
 use App\Models\Booking;
+use App\Models\Tour;
 use App\Services\ArticleService;
 use App\Services\BookingService;
 use App\Services\CategoryService;
@@ -16,6 +18,7 @@ use App\Services\TagService;
 use Illuminate\Http\Request;
 use App\Services\TourService;
 use App\Services\UserService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -83,13 +86,13 @@ class HomeController extends Controller
         $latestArticles = $this->articleService->getLatestArticlesByLimit(3);
         $tags = $this->tagService->getAll();
         if (isset($request->category_id)) {
-            $articles = $this->articleService->getByCategoryId($request->category_id, 6);
+            $articles = $this->articleService->getByCategoryId($request->category_id, 8);
         } elseif (isset($request->tag_id)) {
-            $articles = $this->articleService->getByTagId($request->tag_id, 6);
+            $articles = $this->articleService->getByTagId($request->tag_id, 8);
         } elseif (isset($request->search)) {
-            $articles = $this->articleService->search($request->search, 6);
+            $articles = $this->articleService->search($request->search, 8);
         } else {
-            $articles = $this->articleService->getPaginate(6);
+            $articles = $this->articleService->getPaginate(8);
         }
 
         return view('client.article_list', compact('articles', 'categories', 'latestArticles', 'tags'));
@@ -107,6 +110,8 @@ class HomeController extends Controller
 
     public function getLogin()
     {
+        session(['link' => url()->previous()]);
+
         return view('client.login');
     }
 
@@ -115,7 +120,8 @@ class HomeController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember_me)) {
             $user = $this->userService->findByField('email', $request->email)->first();
             if ($user->role == 2) {
-                return redirect('/');
+                // return redirect('/');
+                return redirect(session('link') ?? '/' );
             } else {
                 return redirect()->back()->with('notify', 'Sai email hoặc mật khẩu');
             }
@@ -170,6 +176,7 @@ class HomeController extends Controller
         if ($discount->start_date <= date('Y-m-d') && $discount->end_date >= date('Y-m-d') && $discount->remain_number > 0) {
             return response()->json([
                 'status' => true,
+                'id' => $discount->id,
                 'discount_rate' => $discount->discount_rate
             ]);
         }
@@ -432,5 +439,34 @@ class HomeController extends Controller
         $bookings = Booking::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
 
         return view('client.history', compact('bookings'));
+    }
+
+    public function getRemainSlot(Request $request)
+    {
+        $tourSlot = Tour::find($request->tour_id)->people_limit;
+        $placedSlot = Booking::whereDate('start_date', Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'))->where('tour_id', $request->tour_id)->count();
+        $remainSlot = $tourSlot - $placedSlot;
+        
+        return response()->json([
+            'remain_slot' => $remainSlot
+        ]);
+    }
+
+    public function getProfile()
+    {
+        $user = $this->userService->find(Auth::id());
+
+        return view('client.profile', compact('user'));
+    }
+
+    public function updateProfile(UpdateProfileRequest $request)
+    {
+        $result = $this->userService->update(Auth::id(), $request->all());
+
+        if ($result) {
+            return redirect()->back()->with('notify', 'Cập nhật thông tin thành công.');
+        }
+
+        return redirect()->back()->with('notify', 'Cập nhật thông tin thất bại.');
     }
 }

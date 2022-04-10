@@ -262,7 +262,7 @@
                             </div>
                             <input type="text" hidden name="departure_date" id="departure_date">
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="exampleInputEmail1">Tiền đặt cọc tối thiểu</label>
                             <input type="number" class="form-control" name="deposit" id="exampleInputEmail1" placeholder="Tiền đặt cọc tối thiểu" value="{{ old('deposit', 0) }}">
                             @error('deposit')
@@ -270,7 +270,7 @@
                                     {{ $message }}
                                 </div>    
                             @enderror
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label for="exampleInputEmail1">Nội dung</label>
                             <textarea class="form-control" name="description" id="local-upload" cols="30" rows="10">{!! old('description') !!}</textarea>
