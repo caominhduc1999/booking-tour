@@ -85,7 +85,7 @@ class BookingController extends Controller
         return view('admin.pages.booking.edit', compact('booking', 'tours', 'discounts', 'hotels'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateBookingRequest $request, $id)
     {
         $result = $this->bookingService->update($id, $request->all());
 

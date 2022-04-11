@@ -21,6 +21,6 @@ class Hotel extends Model
 
     public function tours()
     {
-        return $this->belongsToMany(Tour::class);
+        return $this->belongsToMany(Tour::class, 'hotel_tour');
     }
 }

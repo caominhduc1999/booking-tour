@@ -90,7 +90,7 @@
                                 <div class="row" style="margin-left: 0px;">
                                     <label>Ngày khởi hành</label>
                                     <br>
-                                    <input type="text" name="start_date" id="my_date_picker" value="{{ old('start_date') }}">
+                                    <input type="text" name="start_date" id="my_date_picker" value="{{ old('start_date') }}" readonly>
                                     @error('start_date')
                                         <div class="text-danger">
                                             {{ $message }}
@@ -190,7 +190,7 @@
                                         <select name="hotel_id" id="hotel-selection" class="form-control">
                                             <option value="">Tự tìm khách sạn</option>
                                             @foreach ($tour->hotels as $hotel)
-                                                <option value="{{ $hotel->id }}" @if(old('hotel_id') == $hotel->id) selected @endif data-value="{{ $hotel }}">{{ $hotel->name . ' (' . 'Giá tiền:' . number_format($hotel->price_per_day) . ' VNĐ/Ngày - ' . number_format($hotel->price_per_night) . ' VNĐ/đêm)' }}</option>
+                                                <option value="{{ $hotel->id }}" @if(old('hotel_id') == $hotel->id) selected @endif data-value="{{ $hotel }}">{{ $hotel->name . ' (' . 'Giá tiền:' . number_format($hotel->price_per_day) . ' VNĐ/ngày - ' . number_format($hotel->price_per_night) . ' VNĐ/đêm)' }}</option>
                                             @endforeach
                                         </select>
                                         @error('hotel_id')
@@ -292,6 +292,7 @@
         let departureDate = '{{ $tour->departure_date }}'
         let departureDateArray = departureDate.split(',')
         let validDepartureDateArray = [];
+        let htmlDepartureDateArray = [];
         
         departureDateArray.forEach(function(item) {
             let selectItemDate = item.split('/')
@@ -300,7 +301,7 @@
             let itemDate = new Date(formatItemDate)
             let remainSlot = ''
             if (itemDate > currentDate) {
-                 // calculate remain slot
+                validDepartureDateArray.push(item)
                 $.ajax({
                     type: "GET",
                     url: '/get-remain-slot',
@@ -311,13 +312,13 @@
                     success: function(data)
                     {
                         remainSlot = data.remain_slot
-                        validDepartureDateArray.push({
+                        htmlDepartureDateArray.push({
                             'date': item,
                             'remain_slot': remainSlot
                         });
 
                         let html = ''
-                        validDepartureDateArray.forEach(function(item) {
+                        htmlDepartureDateArray.forEach(function(item) {
                             html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
                         })
                         $('#validDepartureDateArray').html(html)

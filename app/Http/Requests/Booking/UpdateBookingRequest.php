@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Booking;
 
+use App\Models\Tour;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBookingRequest extends FormRequest
@@ -33,7 +34,7 @@ class UpdateBookingRequest extends FormRequest
             'booking_person_name' => 'required',
             'booking_person_email' => 'required',
             'booking_person_address' => 'nullable',
-            'payment' => 'required',
+            // 'payment' => 'required',
         ];
     }
 
@@ -55,7 +56,7 @@ class UpdateBookingRequest extends FormRequest
             'booking_person_phone.required' => 'Vui lòng nhập SĐT người đặt',
             'booking_person_email.required' => 'Vui lòng nhập email người đặt',
             'booking_person_address.required' => 'Vui lòng nhập địa chỉ người đặt',
-            'payment.required' => 'Vui lòng nhập hình thức thanh toán',
+            // 'payment.required' => 'Vui lòng nhập hình thức thanh toán',
         ];
     }
 }

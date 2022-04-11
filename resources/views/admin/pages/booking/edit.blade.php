@@ -39,6 +39,13 @@
                                     <option value="{{ $tour->id }}" @if(old('tour_id') ? old('tour_id') == $tour->id : $booking->tour_id == $tour->id) selected @endif data-value="{{ $tour }}">{{ $tour->name }}</option>
                                 @endforeach
                             </select>
+                            <div id="tour-info" style="background-color: yellow; padding: 15px;">
+                                <h5>Thông tin tour:</h5>
+                                <p>Vé người lớn: {{ number_format($booking->tour->adult_price) }} VNĐ</p>
+                                <p>Vé trẻ em: {{ number_format($booking->tour->children_price) }} VNĐ</p>
+                                <p>Vé trẻ nhỏ: {{ number_format($booking->tour->baby_price) }} VNĐ</p>
+                                <p>Thời gian: {{ $booking->tour->days }} ngày - {{ $booking->tour->nights }} đêm</p>
+                            </div>
                             <input type="hidden" name="tour_id" value="{{ $booking->tour_id }}">
                             @error('tour_id')
                                 <div class="text-danger">
@@ -49,7 +56,7 @@
                         
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_name" id="booking_person_name" disabled placeholder="Tên người đặt" value="{{ old('booking_person_name', $booking->booking_person_name) }}">
+                            <input type="text" class="form-control" name="booking_person_name" id="booking_person_name" placeholder="Tên người đặt" value="{{ old('booking_person_name', $booking->booking_person_name) }}">
                             @error('booking_person_name')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -58,7 +65,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">SĐT người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_phone" id="booking_person_phone" disabled placeholder="SĐT người đặt" value="{{ old('booking_person_phone', $booking->booking_person_phone) }}">
+                            <input type="text" class="form-control" name="booking_person_phone" id="booking_person_phone" placeholder="SĐT người đặt" value="{{ old('booking_person_phone', $booking->booking_person_phone) }}">
                             @error('booking_person_phone')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -67,7 +74,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_email" id="booking_person_email" disabled placeholder="Email người đặt" value="{{ old('booking_person_email', $booking->booking_person_email) }}">
+                            <input type="text" class="form-control" name="booking_person_email" id="booking_person_email" placeholder="Email người đặt" value="{{ old('booking_person_email', $booking->booking_person_email) }}">
                             @error('booking_person_email')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -76,7 +83,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Địa chỉ người đặt</label>
-                            <input type="text" class="form-control" name="booking_person_address" id="booking_person_address" disabled placeholder="Địa chỉ người đặt" value="{{ old('booking_person_address', $booking->booking_person_address) }}">
+                            <input type="text" class="form-control" name="booking_person_address" id="booking_person_address" placeholder="Địa chỉ người đặt" value="{{ old('booking_person_address', $booking->booking_person_address) }}">
                             @error('booking_person_address')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -98,10 +105,10 @@
                                     <label for="exampleInputEmail1">Ngày khởi hành</label>
                                     {{-- <input type="date" class="form-control" name="start_date" id="exampleInputEmail1" placeholder="Ngày khởi hành" value="{{ old('start_date') }}"> --}}
                                     {{-- <input readonly type="text" name="start_date" id="my_date_picker" value="{{ old('start_date', \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y')) }}"> --}}
-                                    <input type="text" name="start_date" value="{{ old('start_date', \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y')) }}" disabled>
+                                    <input type="text" id="my_date_picker" name="start_date" value="{{ old('start_date', \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y')) }}" readonly>
                                 </div>
                                 <div class="col-md-6">
-                                    <label>Lịch khởi hành sắn có</label>
+                                    <label>Lịch khởi hành sẵn có</label>
                                     <div id="validDepartureDateArray"></div>
                                 </div>
                             </div>
@@ -113,7 +120,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng người lớn</label>
-                            <input disabled type="number" class="form-control price" name="adult_number" id="exampleInputEmail1" placeholder="Số lượng người lớn" value="{{ old('adult_number', $booking->adult_number) }}">
+                            <input type="number" class="form-control price" name="adult_number" id="exampleInputEmail1" placeholder="Số lượng người lớn" value="{{ old('adult_number', $booking->adult_number) }}">
                             @error('adult_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -122,7 +129,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng trẻ em</label>
-                            <input disabled type="number" class="form-control price" name="children_number" id="exampleInputEmail1" placeholder="Số lượng trẻ em" value="{{ old('children_number', $booking->children_number) }}">
+                            <input type="number" class="form-control price" name="children_number" id="exampleInputEmail1" placeholder="Số lượng trẻ em" value="{{ old('children_number', $booking->children_number) }}">
                             @error('children_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -131,7 +138,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Số lượng trẻ sơ sinh</label>
-                            <input disabled type="number" class="form-control price" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number', $booking->baby_number) }}">
+                            <input type="number" class="form-control price" name="baby_number" id="exampleInputEmail1" placeholder="Số lượng trẻ sơ sinh" value="{{ old('baby_number', $booking->baby_number) }}">
                             @error('baby_number')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -140,9 +147,9 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Khách sạn</label>
-                            <select class="form-control" name="hotel_id" id="hotel_id" disabled>
+                            <select class="form-control" name="hotel_id" id="hotel_id">
                                 <option value=""></option>
-                                @foreach($hotels as $hotel)
+                                @foreach($booking->tour->hotels as $hotel)
                                     <option value="{{ $hotel->id }}" data-value="{{ $hotel }}" @if(old('hotel_id') ? old('hotel_id') == $hotel->id : $booking->hotel_id == $hotel->id) selected @endif >{{ $hotel->name }}</option>
                                 @endforeach
                             </select>
@@ -188,9 +195,9 @@
                             <label for="exampleInputEmail1">Hình thức thanh toán</label>
                             <select class="form-control" name="payment" id="" disabled>
                                 <option value="1" @if((old('payment') ? old('payment') == 1 : $booking->payment) == 1) selected @endif>Tiền mặt</option>
-                                <option value="2" @if((old('payment') ? old('payment') == 2 : $booking->payment) == 2) selected @endif>Paypal</option>
+                                {{-- <option value="2" @if((old('payment') ? old('payment') == 2 : $booking->payment) == 2) selected @endif>Paypal</option>
                                 <option value="3" @if((old('payment') ? old('payment') == 3 : $booking->payment) == 3) selected @endif>Momo</option>
-                                <option value="3" @if((old('payment') ? old('payment') == 4 : $booking->payment) == 4) selected @endif>Vnpay</option>
+                                <option value="3" @if((old('payment') ? old('payment') == 4 : $booking->payment) == 4) selected @endif>Vnpay</option> --}}
                             </select>
                             @error('payment')
                                 <div class="text-danger">
@@ -273,16 +280,20 @@ crossorigin="anonymous"></script>
             })
 
             function calculateTotalPrice(data) {
-                let adultPrice = data.adult_price
-                let childrenPrice = data.children_price
-                let babyPrice = data.baby_price
-
-                let adultNumber = $('input[name="adult_number"]').val()
-                let childrenNumber = $('input[name="children_number"]').val()
-                let babyNumber = $('input[name="baby_number"]').val()
-
-                let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
-                $('.total-price').val(totalPrice)
+                if (data != null) {
+                    let adultPrice = data.adult_price
+                    let childrenPrice = data.children_price
+                    let babyPrice = data.baby_price
+    
+                    let adultNumber = $('input[name="adult_number"]').val()
+                    let childrenNumber = $('input[name="children_number"]').val()
+                    let babyNumber = $('input[name="baby_number"]').val()
+    
+                    let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
+                    $('.total-price').val(totalPrice)
+                } else {
+                    $('.total-price').val(0)
+                }
             }
 
             $("#hotel_id").change(function () {
@@ -318,7 +329,7 @@ crossorigin="anonymous"></script>
 
                 let selectedTour = $("#tour-selection :selected")
                 let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
-                if (hotelData != undefined) {
+                if (hotelData != null && tourData != null) {
                     let hotelPrice = parseInt(hotelData.price_per_day) * parseInt(tourData.days) + parseInt(hotelData.price_per_night) * parseInt(tourData.nights);
                     $('#hotel_price').val(hotelPrice)
                     let hotelPriceValue = parseInt($('#hotel_price').val())
@@ -335,87 +346,101 @@ crossorigin="anonymous"></script>
     
                     $('.total-price').val(totalPrice + hotelPriceValue)
                 } else {
-                    let adultPrice = tourData.adult_price
-                    let childrenPrice = tourData.children_price
-                    let babyPrice = tourData.baby_price
-    
-                    let adultNumber = $('input[name="adult_number"]').val()
-                    let childrenNumber = $('input[name="children_number"]').val()
-                    let babyNumber = $('input[name="baby_number"]').val()
-    
-                    let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
-    
-                    $('.total-price').val(totalPrice)
+                    if (tourData != null) {
+                        let adultPrice = tourData.adult_price
+                        let childrenPrice = tourData.children_price
+                        let babyPrice = tourData.baby_price
+        
+                        let adultNumber = $('input[name="adult_number"]').val()
+                        let childrenNumber = $('input[name="children_number"]').val()
+                        let babyNumber = $('input[name="baby_number"]').val()
+        
+                        let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
+        
+                        $('.total-price').val(totalPrice)
+                    } else {
+                        $('.total-price').val(0)
+                    }
                 }
+            }
+
+            function priceFormat(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
 
             function getDepartureDate() {
                 let selectedTour = $("#tour-selection :selected")
                 let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
-                let departureDate = tourData.departure_date
-                let departureDateArray = departureDate.split(',')
-                let validDepartureDateArray = [];
-                departureDateArray.forEach(function(item) {
-                    let selectItemDate = item.split('/')
-                    let formatItemDate = `${selectItemDate[1]}/${selectItemDate[0]}/${selectItemDate[2]}`
-                    let currentDate = new Date()
-                    let itemDate = new Date(formatItemDate)
-                    if (itemDate > currentDate) {
-                        validDepartureDateArray.push(item)
-                        // $.ajax({
-                        //     type: "GET",
-                        //     url: '/get-remain-slot',
-                        //     data: {
-                        //         tour_id: '{{ $tour->id }}',
-                        //         start_date: item
-                        //     }, // serializes the form's elements.
-                        //     success: function(data)
-                        //     {
-                        //         remainSlot = data.remain_slot
-                        //         validDepartureDateArray.push({
-                        //             'date': item,
-                        //             'remain_slot': remainSlot
-                        //         });
-
-                        //         let html = ''
-                        //         validDepartureDateArray.forEach(function(item) {
-                        //             html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
-                        //         })
-                        //         $('#validDepartureDateArray').html(html)
-                        //     }
-                        // });
-                    }
-                })
-                let html = ''
-                validDepartureDateArray.forEach(function(item) {
-                    html += `<label>${item}</label><br>`
-                })
-                $('#validDepartureDateArray').html(html)
+                if (tourData != null) {
+                    let departureDate = tourData.departure_date
+                    let departureDateArray = departureDate.split(',')
+                    let validDepartureDateArray = [];
+                    let htmlDepartureDateArray = [];
+                    departureDateArray.forEach(function(item) {
+                        let selectItemDate = item.split('/')
+                        let formatItemDate = `${selectItemDate[1]}/${selectItemDate[0]}/${selectItemDate[2]}`
+                        let currentDate = new Date()
+                        let itemDate = new Date(formatItemDate)
+                        if (itemDate > currentDate) {
+                            validDepartureDateArray.push(item)
+                            $.ajax({
+                                type: "GET",
+                                url: '/get-remain-slot',
+                                data: {
+                                    tour_id: '{{ $tour->id }}',
+                                    start_date: item
+                                }, // serializes the form's elements.
+                                success: function(data)
+                                {
+                                    remainSlot = data.remain_slot
+                                    htmlDepartureDateArray.push({
+                                        'date': item,
+                                        'remain_slot': remainSlot
+                                    });
     
-                $.datepicker.regional['vi'] = {
-                monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
-                monthNamesShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
-                dayNames: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
-                dayNamesShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
-                dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
-                weekHeader: 'Sm',
-                dateFormat: 'dd/mm/yy',
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: ''
-                };
-    
-                $.datepicker.setDefaults($.datepicker.regional['vi']);
-                $('#my_date_picker').datepicker('destroy');
-                $("#my_date_picker").datepicker({
+                                    let html = ''
+                                    htmlDepartureDateArray.forEach(function(item) {
+                                        html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
+                                    })
+                                    $('#validDepartureDateArray').html(html)
+                                }
+                            });
+                        }
+                    })
+                    // let html = ''
+                    // validDepartureDateArray.forEach(function(item) {
+                    //     html += `<label>${item}</label><br>`
+                    // })
+                    // $('#validDepartureDateArray').html(html)
+        
+                    $.datepicker.regional['vi'] = {
+                    monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                    monthNamesShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                    dayNames: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+                    dayNamesShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+                    dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+                    weekHeader: 'Sm',
                     dateFormat: 'dd/mm/yy',
-                    beforeShowDay: function(date) {
-                        var string = jQuery.datepicker.formatDate('dd/mm/yy', date);
-    
-                        return [validDepartureDateArray.indexOf(string) != -1]
-                    }
-                })
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: ''
+                    };
+        
+                    $.datepicker.setDefaults($.datepicker.regional['vi']);
+                    $('#my_date_picker').datepicker('destroy');
+                    $("#my_date_picker").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        beforeShowDay: function(date) {
+                            var string = jQuery.datepicker.formatDate('dd/mm/yy', date);
+        
+                            return [validDepartureDateArray.indexOf(string) != -1]
+                        }
+                    })
+                } else {
+                    $('#my_date_picker').datepicker('destroy');
+                    $('#validDepartureDateArray').html('')
+                }
             }
             getDepartureDate()
 

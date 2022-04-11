@@ -444,7 +444,11 @@ class HomeController extends Controller
     public function getRemainSlot(Request $request)
     {
         $tourSlot = Tour::find($request->tour_id)->people_limit;
-        $placedSlot = Booking::whereDate('start_date', Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'))->where('tour_id', $request->tour_id)->count();
+        $sameBooking = Booking::whereDate('start_date', Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d'))->where('tour_id', $request->tour_id);
+        $adultSlot = $sameBooking->sum('adult_number');
+        $childrenSlot = $sameBooking->sum('children_number');
+        $babySlot = $sameBooking->sum('baby_number');
+        $placedSlot = $adultSlot + $childrenSlot + $babySlot;
         $remainSlot = $tourSlot - $placedSlot;
         
         return response()->json([

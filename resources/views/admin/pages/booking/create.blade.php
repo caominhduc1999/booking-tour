@@ -35,9 +35,10 @@
                             <select class="form-control" name="tour_id" id="tour-selection">
                                 <option value=""></option>
                                 @foreach($tours as $tour)
-                                    <option value="{{ $tour->id }}" @if(old('tour_id') == $tour->id) selected @endif data-value="{{ $tour }}">{{ $tour->name }}</option>
+                                    <option value="{{ $tour->id }}" @if(old('tour_id') == $tour->id) selected @endif data-value="{{ collect($tour, $tour->hotels->pluck('hotels.id')) }}">{{ $tour->name }}</option>
                                 @endforeach
                             </select>
+                            <div id="tour-info" style="background-color: yellow; padding: 15px;"></div>
                             @error('tour_id')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -99,10 +100,15 @@
                                 <div class="col-md-6">
                                     <label for="exampleInputEmail1">Ngày khởi hành</label>
                                     {{-- <input type="date" class="form-control" name="start_date" id="exampleInputEmail1" placeholder="Ngày khởi hành" value="{{ old('start_date') }}"> --}}
-                                    <input type="text" name="start_date" id="my_date_picker" value="{{ old('start_date') }}">
+                                    <input type="text" name="start_date" id="my_date_picker" value="{{ old('start_date') }}" readonly>
+                                    @error('people_limit')
+                                        <div class="text-danger">
+                                            {{ $message }}
+                                        </div>    
+                                    @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label>Lịch khởi hành sắn có</label>
+                                    <label>Lịch khởi hành sẵn có</label>
                                     <div id="validDepartureDateArray"></div>
                                 </div>
                             </div>
@@ -144,7 +150,7 @@
                             <select class="form-control" name="hotel_id" id="hotel_id">
                                 <option value="">Tự tìm khách sạn</option>
                                 @foreach($hotels as $hotel)
-                                    <option value="{{ $hotel->id }}" @if(old('hotel_id') == $hotel->id) selected @endif data-value="{{ $hotel }}">{{ $hotel->name }}</option>
+                                    <option class="hotel_option" value="{{ $hotel->id }}" @if(old('hotel_id') == $hotel->id) selected @endif data-value="{{ $hotel }}">{{ $hotel->name . ' (' . 'Giá tiền:' . number_format($hotel->price_per_day) . ' VNĐ/ngày - ' . number_format($hotel->price_per_night) . ' VNĐ/đêm)' }}</option>
                                 @endforeach
                             </select>
                             @error('hotel_id')
@@ -201,7 +207,7 @@
                             <label for="exampleInputEmail1">Trạng thái thanh toán</label>
                             <select class="form-control" name="payment_status" id="">
                                 <option value="1">Chưa thanh toán</option>
-                                <option value="2">Đã đặt cọc</option>
+                                {{-- <option value="2">Đã đặt cọc</option> --}}
                                 <option value="3">Đã thanh toán</option>
                             </select>
                             @error('payment_status')
@@ -275,6 +281,31 @@ crossorigin="anonymous"></script>
                 calculateTotalPrice(tourData)
                 getDepartureDate()
                 calculateHotelPrice()
+                
+                let validHotel = tourData.hotels.map(hotel => hotel.id)
+                let selectObject = document.getElementById('hotel_id')
+                for (var i=0; i<selectObject.length; i++) {
+                    if (validHotel.includes(parseInt(selectObject.options[i].value)) == false && selectObject.options[i].value != '') {
+                        selectObject.options[i].disabled = true
+                        selectObject.options[i].style.backgroundColor = '#e9ecef'
+                    } else {
+                        selectObject.options[i].disabled = false;
+                        selectObject.options[i].style.backgroundColor = '#ffffff'
+                    }
+                }
+
+                if (tourData != null) {
+                    $('#tour-info').html(
+                        `<h5>Thông tin tour:</h5>
+                        <p>Vé người lớn: ${priceFormat(tourData.adult_price) ?? ''} VNĐ</p>
+                        <p>Vé trẻ em: ${priceFormat(tourData.children_price) ?? ''} VNĐ</p>
+                        <p>Vé trẻ nhỏ: ${priceFormat(tourData.baby_price) ?? ''} VNĐ</p>
+                        <p>Thời gian: ${tourData.days ?? ''} ngày - ${tourData.nights ?? ''} đêm</p>
+                        `
+                    )
+                } else {
+                    $('#tour-info').html('')
+                }
                 // calculateTotalPriceAfterDiscount()
 
             })
@@ -345,31 +376,39 @@ crossorigin="anonymous"></script>
     
                     $('.total-price').val(totalPrice + hotelPriceValue)
                 } else {
-                    let adultPrice = tourData.adult_price
-                    let childrenPrice = tourData.children_price
-                    let babyPrice = tourData.baby_price
+                    if (tourData != null) {
+                        let adultPrice = tourData.adult_price
+                        let childrenPrice = tourData.children_price
+                        let babyPrice = tourData.baby_price
+        
+                        let adultNumber = $('input[name="adult_number"]').val()
+                        let childrenNumber = $('input[name="children_number"]').val()
+                        let babyNumber = $('input[name="baby_number"]').val()
+        
+                        let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
+        
+                        $('.total-price').val(totalPrice)
+                    } else {
+                        $('.total-price').val(0)
+                    }
+                }
+            }
+
+            function calculateTotalPrice(data) {
+                if (data != null) {
+                    let adultPrice = data.adult_price
+                    let childrenPrice = data.children_price
+                    let babyPrice = data.baby_price
     
                     let adultNumber = $('input[name="adult_number"]').val()
                     let childrenNumber = $('input[name="children_number"]').val()
                     let babyNumber = $('input[name="baby_number"]').val()
     
                     let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
-    
                     $('.total-price').val(totalPrice)
+                } else {
+                    $('.total-price').val(0)
                 }
-            }
-
-            function calculateTotalPrice(data) {
-                let adultPrice = data.adult_price
-                let childrenPrice = data.children_price
-                let babyPrice = data.baby_price
-
-                let adultNumber = $('input[name="adult_number"]').val()
-                let childrenNumber = $('input[name="children_number"]').val()
-                let babyNumber = $('input[name="baby_number"]').val()
-
-                let totalPrice = adultNumber * adultPrice + childrenNumber * childrenPrice + babyNumber * babyPrice
-                $('.total-price').val(totalPrice)
             }
 
             // $("#discount-selection").change(function () {
@@ -388,73 +427,84 @@ crossorigin="anonymous"></script>
             //         $('.total-price-after-discount').val(totalPriceAfterDiscount)
             //     }
             // }
+            function priceFormat(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
             function getDepartureDate() {
                 let selectedTour = $("#tour-selection :selected")
                 let tourData = selectedTour[0].dataset.value != undefined ? JSON.parse(selectedTour[0].dataset.value) : null
-                let departureDate = tourData.departure_date
-                let departureDateArray = departureDate.split(',')
-                let validDepartureDateArray = [];
-                departureDateArray.forEach(function(item) {
-                    let selectItemDate = item.split('/')
-                    let formatItemDate = `${selectItemDate[1]}/${selectItemDate[0]}/${selectItemDate[2]}`
-                    let currentDate = new Date()
-                    let itemDate = new Date(formatItemDate)
-                    if (itemDate > currentDate) {
-                        validDepartureDateArray.push(item)
-                        // $.ajax({
-                        //     type: "GET",
-                        //     url: '/get-remain-slot',
-                        //     data: {
-                        //         tour_id: tourData.id,
-                        //         start_date: item
-                        //     }, // serializes the form's elements.
-                        //     success: function(data)
-                        //     {
-                        //         remainSlot = data.remain_slot
-                        //         validDepartureDateArray.push({
-                        //             'date': item,
-                        //             'remain_slot': remainSlot
-                        //         });
+               
+                if (tourData != null) {
+                    let departureDate = tourData.departure_date
+                    let departureDateArray = departureDate.split(',')
+                    let validDepartureDateArray = [];
+                    let htmlDepartureDateArray = [];
+                    departureDateArray.forEach(function(item) {
+                        let selectItemDate = item.split('/')
+                        let formatItemDate = `${selectItemDate[1]}/${selectItemDate[0]}/${selectItemDate[2]}`
+                        let currentDate = new Date()
+                        let itemDate = new Date(formatItemDate)
+                        if (itemDate > currentDate) {
+                            validDepartureDateArray.push(item)
+                            $.ajax({
+                                type: "GET",
+                                url: '/get-remain-slot',
+                                data: {
+                                    tour_id: tourData.id,
+                                    start_date: item
+                                }, // serializes the form's elements.
+                                success: function(data)
+                                {
+                                    remainSlot = data.remain_slot
+                                    htmlDepartureDateArray.push({
+                                        'date': item,
+                                        'remain_slot': remainSlot
+                                    });
 
-                        //         let html = ''
-                        //         validDepartureDateArray.forEach(function(item) {
-                        //             html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
-                        //         })
-                        //         $('#validDepartureDateArray').html(html)
-                        //     }
-                        // });
-                    }
-                })
-                let html = ''
-                validDepartureDateArray.forEach(function(item) {
-                    html += `<label>${item}</label><br>`
-                })
-                $('#validDepartureDateArray').html(html)
-    
-                $.datepicker.regional['vi'] = {
-                monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
-                monthNamesShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
-                dayNames: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
-                dayNamesShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
-                dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
-                weekHeader: 'Sm',
-                dateFormat: 'dd/mm/yy',
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: ''
-                };
-    
-                $.datepicker.setDefaults($.datepicker.regional['vi']);
-                $('#my_date_picker').datepicker('destroy');
-                $("#my_date_picker").datepicker({
+                                    let html = ''
+                                    htmlDepartureDateArray.forEach(function(item) {
+                                        html += `<label>${item.date} - Còn ${item.remain_slot} chỗ</label><br>`
+                                    })
+                                    $('#validDepartureDateArray').html(html)
+                                }
+                            });
+                        }
+                    })
+                    // let html = ''
+                    // validDepartureDateArray.forEach(function(item) {
+                    //     html += `<label>${item}</label><br>`
+                    // })
+                    // $('#validDepartureDateArray').html(html)
+        
+                    $.datepicker.regional['vi'] = {
+                    monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                    monthNamesShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                    dayNames: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+                    dayNamesShort: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+                    dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+                    weekHeader: 'Sm',
                     dateFormat: 'dd/mm/yy',
-                    beforeShowDay: function(date) {
-                        var string = jQuery.datepicker.formatDate('dd/mm/yy', date);
-    
-                        return [validDepartureDateArray.indexOf(string) != -1]
-                    }
-                })
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: ''
+                    };
+        
+                    $.datepicker.setDefaults($.datepicker.regional['vi']);
+                    $('#my_date_picker').datepicker('destroy');
+                    $("#my_date_picker").datepicker({
+                        dateFormat: 'dd/mm/yy',
+                        beforeShowDay: function(date) {
+                            var string = jQuery.datepicker.formatDate('dd/mm/yy', date);
+        
+                            return [validDepartureDateArray.indexOf(string) != -1]
+                        }
+                    })
+                } else {
+                    $('#my_date_picker').datepicker('destroy');
+                    $('#validDepartureDateArray').html('')
+                }
             }
             getDepartureDate()
         })
