@@ -221,6 +221,7 @@
                             <select class="form-control" name="status" id="">
                                 <option value="1">Chờ xác nhận</option>
                                 <option value="2">Đã xác nhận</option>
+                                <option value="3">Đã hủy</option>
                             </select>
                             @error('status')
                                 <div class="text-danger">

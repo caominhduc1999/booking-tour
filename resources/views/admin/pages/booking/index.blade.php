@@ -78,6 +78,7 @@
                                             <option value="">Trạng thái</option>
                                             <option value="1" @if(request()->status == 1) selected @endif>Chờ xác nhận</option>
                                             <option value="2" @if(request()->status == 2) selected @endif>Đã xác nhận</option>
+                                            <option value="3" @if(request()->status == 3) selected @endif>Đã hủy</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
@@ -170,6 +171,19 @@
                                                         <td>{{ $booking->booking_date }}</td>
                                                         <td>{{ $booking->start_date }}</td>
                                                         <td>{{ $booking->status == 1 ? 'Chờ xác nhận' : 'Đã xác nhận' }}</td>
+                                                        @switch($booking->status)
+                                                            @case(1)
+                                                                <td>Chờ xác nhận</td>
+                                                                @break
+                                                            @case(2)
+                                                                <td>Đã xác nhận</td>
+                                                                @break
+                                                            @case(3)
+                                                                <td>Đã hủy</td>
+                                                                @break
+                                                            @default
+                                                                <span></span>
+                                                        @endswitch
                                                         @switch($booking->payment)
                                                             @case(1)
                                                                 <td>TT tại quầy</td>

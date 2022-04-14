@@ -223,6 +223,7 @@
                             <select class="form-control" name="status" id="">
                                 <option value="1" @if(old('status') ? old('status') == 1 : $booking->status == 1) selected @endif>Chờ xác nhận</option>
                                 <option value="2" @if(old('status') ? old('status') == 2 : $booking->status == 2) selected @endif>Đã xác nhận</option>
+                                <option value="3" @if(old('status') ? old('status') == 3 : $booking->status == 3) selected @endif>Đã hủy</option>
                             </select>
                             @error('status')
                                 <div class="text-danger">

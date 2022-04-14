@@ -39,7 +39,7 @@
                                 </li>
                                 @if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->role == 2)
                                     <li class="dropdown signin_wrapper">
-                                        <a>Xin chào {{ Auth::user()->name }}</a>
+                                        <a href="{{ route('get_profile') }}">Xin chào {{ Auth::user()->name }}</a>
                                     </li>
                                     <li> </li>
                                     <li class="dropdown signin_wrapper">

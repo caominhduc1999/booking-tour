@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Mail\BookingInformation;
 use App\Models\Booking;
+use App\Models\Review;
 use App\Models\Tour;
 use App\Services\ArticleService;
 use App\Services\BookingService;
@@ -110,8 +111,6 @@ class HomeController extends Controller
 
     public function getLogin()
     {
-        session(['link' => url()->previous()]);
-
         return view('client.login');
     }
 
@@ -120,8 +119,7 @@ class HomeController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember_me)) {
             $user = $this->userService->findByField('email', $request->email)->first();
             if ($user->role == 2) {
-                // return redirect('/');
-                return redirect(session('link') ?? '/' );
+                return redirect('/');
             } else {
                 return redirect()->back()->with('notify', 'Sai email hoặc mật khẩu');
             }
@@ -217,21 +215,6 @@ class HomeController extends Controller
         } 
         elseif(isset($request->vnp_TransactionStatus) && $request->vnp_TransactionStatus == '00') { // vnpay
             $vnpayBookingData = Session::get('vnpayBookingData');
-            // $vnpayBookingData['tour_id'] = ;
-            // $vnpayBookingData['user_id'] = ;
-            // $vnpayBookingData['hotel_id'] = $sessionData['hotel_id'] != "" ? $sessionData['hotel_id'] : null;
-            // $vnpayBookingData['booking_person_phone'] = $sessionData['booking_person_phone'];
-            // $vnpayBookingData['booking_person_name'] = $sessionData['booking_person_name'];
-            // $vnpayBookingData['booking_person_email'] = $sessionData['booking_person_email'];
-            // $vnpayBookingData['booking_person_address'] = $sessionData['booking_person_address'];
-            // $vnpayBookingData['total_price'] = $sessionData['booking_price'];
-            // $vnpayBookingData['start_date'] = $sessionData['start_date'];
-            // $vnpayBookingData['adult_number'] = $sessionData['adult_number'];
-            // $vnpayBookingData['children_number'] = $sessionData['children_number'];
-            // $vnpayBookingData['baby_number'] = $sessionData['baby_number'];
-            // $vnpayBookingData['discount_id'] = $sessionData['discount_id'] != "" ? $sessionData['discount_id'] : null;
-            // $vnpayBookingData['note'] = $sessionData['note'];
-            // $vnpayBookingData['status'] = 1;
             $vnpayBookingData['payment_status'] = 3;
             $vnpayBookingData['payment'] = 4;
 
@@ -472,5 +455,34 @@ class HomeController extends Controller
         }
 
         return redirect()->back()->with('notify', 'Cập nhật thông tin thất bại.');
+    }
+
+    public function cancelBooking($id)
+    {
+        $booking = $this->bookingService->find($id);
+        $booking->status = 3;
+        $booking->save();
+
+        return redirect()->back()->with('notify', 'Hủy tour thành công');
+    }
+
+    public function comment(Request $request)
+    {
+        $reviewData = [
+            'tour_id' => $request->tour_id,
+            'user_id' => Auth::id(),
+            'stars' => $request->stars ?? 5,
+            'description' => $request->description,
+            'is_show' => 1
+        ];
+
+        $review = Review::create($reviewData);
+
+        return response()->json([
+            'user_name' => $review->user->name,
+            'created_at' => \Carbon\Carbon::parse($review->created_at)->format('d/m/Y'),
+            'stars' => $review->stars,
+            'description' => $review->description
+        ]);
     }
 }

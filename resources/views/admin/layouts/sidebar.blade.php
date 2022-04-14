@@ -47,7 +47,7 @@
                   </li>
                   <li class="nav-item">
                       <a href="/admin/categories" class="nav-link">
-                          <i class="nav-icon fas fa-tachometer-alt"></i>
+                          <i class="nav-icon fas fa-copy"></i>
                           <p>
                               Danh mục
 
@@ -56,7 +56,7 @@
                   </li>
                   <li class="nav-item">
                     <a href="/admin/articles" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-edit"></i>
                         <p>
                             Bài viết
                         </p>
@@ -64,7 +64,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/tags" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon far fa-plus-square"></i>
                         <p>
                             Tag
                         </p>
@@ -72,7 +72,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/hotels" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-book"></i>
                         <p>
                             Khách sạn
                         </p>
@@ -80,7 +80,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/tour-guides" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-tree"></i>
                         <p>
                             Hướng dẫn viên
                         </p>
@@ -88,7 +88,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/users" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
                             Người dùng
                         </p>
@@ -96,7 +96,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/discounts" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-columns"></i>
                         <p>
                             Mã giảm giá
                         </p>
@@ -104,7 +104,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/tours" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="fas fa-circle nav-icon"></i>
                         <p>
                             Tour
                         </p>
@@ -112,7 +112,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/bookings" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon far fa-calendar-alt"></i>
                         <p>
                            Đặt Tour
                         </p>
@@ -120,7 +120,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="/admin/logout" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon far fa-circle text-danger"></i>
                         <p>
                             Đăng xuất
                         </p>

@@ -4,7 +4,7 @@
 <p>SĐT người đặt: {{ $data['booking_person_phone'] }}</p>
 <p>Email người đặt: {{ $data['booking_person_email'] }}</p>
 <p>Địa chỉ người đặt: {{ $data['booking_person_address'] }}</p>
-<p>Ngày đặt: {{ \Carbon\Carbon::parse($data['start_date'])->format('d-m-Y') }}</p>
+<p>Ngày đặt: {{ \Carbon\Carbon::createFromFormat('d/m/Y', $data['start_date'])->format('d-m-Y') }}</p>
 <p>Số lượng người lớn: {{ $data['adult_number'] }}</p>
 <p>Số lượng trẻ em: {{ $data['children_number'] }}</p>
 <p>Số lượng trẻ nhỏ: {{ $data['baby_number'] }}</p>

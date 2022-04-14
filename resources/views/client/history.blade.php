@@ -3,11 +3,6 @@
     <!-- Style Css -->
     <link href="{{ asset('assets/client/css/shop.css') }}" rel="stylesheet">
     <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
-    <style>
-        .container {
-            width: 1480px !important;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -21,7 +16,7 @@
             <div class="col-lg-4 col-md-4 col-xs-12 col-sm-6">
                 <div class="sub_title_section">
                     <ul class="sub_title">
-                        <li> <a href="/"> Home </a> <i class="fa fa-angle-right" aria-hidden="true"></i> </li>
+                        <li> <a href="/"> Trang chủ </a> <i class="fa fa-angle-right" aria-hidden="true"></i> </li>
                         <li> Lịch sử đặt tour  </li>
                     </ul>
                 </div>
@@ -42,6 +37,11 @@
             </div>
             <div class="shop_cart_page_wrapper">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @if(Session::has('notify'))
+                        <div class="alert alert-success">
+                            {{ Session::get('notify')}}
+                        </div>
+                    @endif
                     <div class="table-responsive cart-calculations">
                         <table class="table">
 
@@ -55,6 +55,7 @@
                                     <th>HTTT</th>
                                     <th>Trạng thái HTTT</th>
                                     <th>Tổng tiền</th>
+                                    <th>Thao tác</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -67,7 +68,21 @@
                                         <td>{{ $booking->tour->name }}</td>
                                         <td>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d/m/Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($booking->start_date)->format('d/m/Y') }}</td>
-                                        <td>{{ $booking->status == 1 ? 'Chờ xác nhận' : 'Đã xác nhận' }}</td>
+                                        <td>
+                                            @switch($booking->status)
+                                                @case(1)
+                                                    <span>Chờ xác nhận</span>
+                                                    @break
+                                                @case(2)
+                                                    <span>Đã xác nhận</span>
+                                                    @break
+                                                @case(3)
+                                                    <span>Đã hủy</span>
+                                                    @break
+                                                @default
+                                                    <span></span>
+                                            @endswitch
+                                        </td>
                                         <td>
                                             @switch($booking->payment)
                                                 @case(1)
@@ -101,15 +116,19 @@
                                                     <span></span>
                                             @endswitch
                                         </td>
+                                        
                                         <td class="cart_page_totl">{{ number_format($booking->total_price) }} VNĐ</td>
+                                        <td>
+                                            <a onclick="return confirm('Xác nhận hủy tour ?')" href="{{ route('cancel_booking', $booking->id) }}"><button class="btn btn-danger" @if($booking->status == 2 || $booking->status == 3) disabled @endif>Hủy tour</button></a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        
                     </div>
                 </div>
-
-             
+                <p style="margin-left: 15px; color: red;">Chú ý: Tour đã được xác nhận không thể hủy. Nếu bạn muốn hủy tour đã đặt, vui lòng liên hệ với chúng tôi theo hotline: 0986005759</p>
             </div>
 
         </div>

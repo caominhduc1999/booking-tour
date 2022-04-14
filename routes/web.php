@@ -63,6 +63,8 @@ Route::get('/booking-history', [HomeController::class, 'bookingHistory'])->name(
 Route::get('/get-remain-slot', [HomeController::class, 'getRemainSlot'])->name('get_remain_slot');
 Route::get('/profile', [HomeController::class, 'getProfile'])->name('get_profile');
 Route::post('/profile/update', [HomeController::class, 'updateProfile'])->name('update_profile');
+Route::get('/cancel-booking/{id}', [HomeController::class, 'cancelBooking'])->name('cancel_booking');
+Route::post('/comment', [HomeController::class, 'comment'])->name('comment');
 
 Route::get('/create-transaction', [PayPalController::class, 'createTransaction'])->name('createTransaction');
 Route::post('/process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');

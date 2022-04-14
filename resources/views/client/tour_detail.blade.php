@@ -14,6 +14,31 @@
                 font-size: 16px;
                 border-radius: 5px;
             }
+            .rating-css div {
+                color: #ffe400;
+                font-size: 30px;
+                font-family: sans-serif;
+                font-weight: 800;
+                text-align: center;
+                text-transform: uppercase;
+                padding: 20px 0;
+                float: left;
+            }
+            .rating-css input {
+                display: none;
+            }
+            .rating-css input + label {
+                font-size: 30px;
+                text-shadow: 1px 1px 0 #ffe400;
+                cursor: pointer;
+            }
+            .rating-css input:checked + label ~ label {
+                color: #838383;
+            }
+            .rating-css label:active {
+                transform: scale(0.8);
+                transition: 0.3s ease;
+            }
         </style>
 @endsection
 
@@ -157,54 +182,76 @@
                 </div>
                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                     <div class="comments_wrapper">
-                        <h4>Bình luận (04)</h4>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
-                                <div class="comments_Box last_comment_box">
-                                    <div class="img_wrapper">
-                                        <img src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" class=""
-                                            alt="author_img" height="70px" />
-                                    </div>
-                                    <div class="text_wrapper">
-                                        <div class="author_detail">
-                                            <span class="author_name"> Eva Marilla <i
-                                                    class="fa fa-circle"></i></span>
-
-                                            <span class="publish_date"> July 5, 2018 - <a href="#">Reply</a> </span>
+                        <h4>Bình luận</h4>
+                        @foreach($tour->reviews as $review)
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                    <div class="comments_Box last_comment_box">
+                                        <div class="img_wrapper">
+                                            <img src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" class=""
+                                                alt="author_img" height="70px" />
                                         </div>
-                                        <div class="author_content">
-                                            <p>Integer porttitor fringilla vestibulum. Phasellus curs our tinnt nulla,
-                                                ut mattis augue finibus ac. Vivamus elementum enim ac enim ultrices
-                                                rhoncus. </p>
+                                        <div class="text_wrapper">
+                                            <div class="author_detail">
+                                                <span class="author_name">{{ $review->user->name }}<i
+                                                        class="fa fa-circle"></i></span>
+
+                                                <span class="publish_date"> {{ \Carbon\Carbon::parse($review->created_at)->format('d/m/Y') }}</span> 
+                                                @for($i = 1; $i <= $review->stars; $i++)
+                                                    <label for="rating1" class="fa fa-star"></label>
+                                                @endfor
+                                            </div>
+                                            <div class="author_content">
+                                                <p>{{ $review->description }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
 
                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                     <div class="comments_form">
                         <h4>Để lại bình luận</h4>
-                        <div class="row">
-                            <!-- /.col-md-6 -->
-                            <div class="col-md-12">
-                                <div class="formsix-m">
-                                    <div class="form-group i-message">
-                                        <label class="sr-only">Nội dung</label>
-                                        <textarea class="form-control" required="" rows="7" id="messageTen" placeholder="Nội dung"></textarea>
-                                    </div>
+                        <form action="{{ route('comment') }}" id="review-form" method="post" style="margin-bottom: 20px;">
+                            @csrf
+                            <input type="hidden" name="tour_id" value="{{ $tour->id }}">
+                            <div class="row">
+                                <div class="rating-css">
+                                    <div class="star-icon">
+                                      <input type="radio" name="stars" id="rating1" value="1">
+                                      <label for="rating1" class="fa fa-star"></label>
+                                      <input type="radio" name="stars" id="rating2" value="2">
+                                      <label for="rating2" class="fa fa-star"></label>
+                                      <input type="radio" name="stars" id="rating3" value="3">
+                                      <label for="rating3" class="fa fa-star"></label>
+                                      <input type="radio" name="stars" id="rating4" value="4">
+                                      <label for="rating4" class="fa fa-star"></label>
+                                      <input type="radio" name="stars" id="rating5" value="5">
+                                      <label for="rating5" class="fa fa-star"></label>
                                 </div>
                             </div>
-                            <!-- /.col-md-12 -->
-                        </div>
-                        <!-- /.row-->
-                        @if(\Auth::check() && \Auth::user()->role == 2)
-                            <button type="submit" class="btn btn-primary btn-block">Gửi bình luận</button>
-                        @else
-                            <a href="{{ route('client_get_login') }}"><button type="button" class="btn btn-primary btn-block">Đăng nhập để bình luận ngay</button></a>
-                        @endif
+                            <div class="row">
+                                <!-- /.col-md-6 -->
+                                <div class="col-md-12">
+                                    <div class="formsix-m">
+                                        <div class="form-group i-message">
+                                            <label class="sr-only">Nội dung</label>
+                                            <textarea class="form-control" name="description" required="" rows="7" id="messageTen" placeholder="Nội dung"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.col-md-12 -->
+                            </div>
+                            <!-- /.row-->
+                            @if(\Auth::check() && \Auth::user()->role == 2)
+                                <button type="submit" class="btn btn-primary btn-block review-btn">Gửi bình luận</button>
+                            @else
+                                <a href="{{ route('client_get_login') }}"><button type="button" class="btn btn-primary btn-block">Đăng nhập để bình luận ngay</button></a>
+                            @endif
+                        </form>
                     </div>
                     <!-- /.comments_form-->
                 </div>
@@ -255,5 +302,60 @@
                 });
             }
         })
+
+        $(document).ready(function(){
+            // Check Radio-box
+            $(".rating input:radio").attr("checked", false);
+
+            $('.rating input').click(function () {
+                $(".rating span").removeClass('checked');
+                $(this).parent().addClass('checked');
+            });
+
+            $('#review-form').on('submit', function(e) {
+                e.preventDefault()
+                var $form = $(this);
+                var serializedData = $form.serialize();
+                $.ajax({
+                    type: "POST",
+                    url: '/comment',
+                    data: serializedData,
+                    success: function(data)
+                    {
+                        var string = `
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                    <div class="comments_Box last_comment_box">
+                                        <div class="img_wrapper">
+                                            <img src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" class=""
+                                                alt="author_img" height="70px" />
+                                        </div>
+                                        <div class="text_wrapper">
+                                            <div class="author_detail">
+                                                <span class="author_name">${data.user_name}<i
+                                                        class="fa fa-circle"></i></span>
+                                                        <span class="publish_date"> ${data.created_at}</span>`
+
+                                    for (let i = 1; i <= data.stars; i++) {
+                                        string = string + `<label for="rating1" class="fa fa-star"></label>`
+                                    }
+
+                                string = string + ` 
+                                                
+                                            </div>
+                                            <div class="author_content">
+                                                <p>${data.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                       $('.comments_wrapper').append(string)
+                        $('#review-form').trigger("reset");
+                    }
+                });
+            })
+        });
     </script>
 @endsection

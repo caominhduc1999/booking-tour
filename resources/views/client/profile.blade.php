@@ -16,7 +16,7 @@
             <div class="col-lg-4 col-md-4 col-xs-12 col-sm-6">
                 <div class="sub_title_section">
                     <ul class="sub_title">
-                        <li> <a href="/"> Home </a> <i class="fa fa-angle-right" aria-hidden="true"></i> </li>
+                        <li> <a href="/"> Trang chủ </a> <i class="fa fa-angle-right" aria-hidden="true"></i> </li>
                         <li> Thông tin khách hàng  </li>
                     </ul>
                 </div>
