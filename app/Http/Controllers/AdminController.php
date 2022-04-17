@@ -28,13 +28,13 @@ class AdminController extends Controller
         $this->articleService = $articleService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $revenue = [];
         $tours = [];
         $now = Carbon::now();
-        $month = $now->month;
-        $year = $now->year;
+        $month = $request->month ?? $now->month;
+        $year = $request->year ?? $now->year;
 
         for($d=1; $d<=31; $d++)
         {

@@ -183,7 +183,7 @@
                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                     <div class="comments_wrapper">
                         <h4>Bình luận</h4>
-                        @foreach($tour->reviews as $review)
+                        @foreach($tour->reviews->where('is_show', 1) as $review)
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                                     <div class="comments_Box last_comment_box">

@@ -14,7 +14,8 @@ class RepositoryServiceProvider extends ServiceProvider
         'TourGuide',
         'Hotel',
         'User',
-        'Discount'
+        'Discount',
+        'Review'
     ];
     
     /**

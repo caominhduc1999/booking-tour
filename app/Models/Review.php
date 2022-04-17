@@ -17,6 +17,10 @@ class Review extends Model
         'is_show'
     ];
 
+    // is_show:
+    // 1: hiện
+    // 2: ẩn
+
     public function tour()
     {
         return $this->belongsTo(Tour::class);

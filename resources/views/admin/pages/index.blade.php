@@ -65,6 +65,51 @@
             <!-- ./col -->
         </div>
         <div>
+            <div>
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select class="form-control" name="month" id="">
+                                <option value="">Tháng hiện tại</option>
+                                <option value="1">Tháng 1</option>
+                                <option value="2">Tháng 2</option>
+                                <option value="3">Tháng 3</option>
+                                <option value="4">Tháng 4</option>
+                                <option value="5">Tháng 5</option>
+                                <option value="6">Tháng 6</option>
+                                <option value="7">Tháng 7</option>
+                                <option value="8">Tháng 8</option>
+                                <option value="9">Tháng 9</option>
+                                <option value="10">Tháng 10</option>
+                                <option value="11">Tháng 11</option>
+                                <option value="12">Tháng 12</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" name="year" id="">
+                                <option value="">Năm hiện tại</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                                <option value="2029">2029</option>
+                                <option value="2030">2030</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-success">Thống kê</button>
+                        </div>
+                    </div>
+                   
+                    <br>
+                   
+                </form>
+            </div>
             <canvas id="myChart"></canvas>
             <canvas id="myRevenue" style="margin-top :100px"></canvas>
         </div>
