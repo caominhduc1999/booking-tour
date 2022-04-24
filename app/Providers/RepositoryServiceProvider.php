@@ -15,7 +15,8 @@ class RepositoryServiceProvider extends ServiceProvider
         'Hotel',
         'User',
         'Discount',
-        'Review'
+        'Review',
+        'Transition'
     ];
     
     /**

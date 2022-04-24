@@ -127,6 +127,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/admin/transitions" class="nav-link">
+                        <i class="nav-icon far fa-book"></i>
+                        <p>
+                           Giao dịch
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="/admin/logout" class="nav-link">
                         <i class="nav-icon far fa-circle text-danger"></i>
                         <p>

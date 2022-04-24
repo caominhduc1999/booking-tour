@@ -43,6 +43,7 @@ class DiscountRepository extends RepositoryAbstract implements DiscountRepositor
             ->when(isset($conditions['remain_number_to']), function ($q) use ($conditions) {
                 $q->where('remain_number', '>=', $conditions['remain_number_to']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }

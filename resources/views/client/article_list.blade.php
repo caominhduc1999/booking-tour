@@ -1,4 +1,7 @@
 @extends('client.layouts.master')
+@section('title')
+    Danh sách bài viết
+@endsection
 @section('stylesheets')
     <!-- Style Css -->
     <link href="{{ asset('assets/client/css/blog_style_5.css') }}" rel="stylesheet">
@@ -132,7 +135,7 @@
                                             @endforeach
                                         </ul>
                                         <a class="readmore pull-right" href="{{ route('client.articles.detail', $article->id) }}"><i class="fa fa-long-arrow-right"></i>
-                                            More</a>
+                                            Đọc thêm</a>
                                     </div>
                                     <!-- /.entry-footer -->
                                 </article>

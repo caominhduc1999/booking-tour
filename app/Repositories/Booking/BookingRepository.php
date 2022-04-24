@@ -40,6 +40,7 @@ class BookingRepository extends RepositoryAbstract implements BookingRepositoryI
             ->when(isset($conditions['payment_status']), function ($q) use ($conditions) {
                 $q->where('payment_status', $conditions['payment_status']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 

@@ -170,7 +170,6 @@
                                                         <td>{{ $booking->booking_person_phone }}</td>
                                                         <td>{{ $booking->booking_date }}</td>
                                                         <td>{{ $booking->start_date }}</td>
-                                                        <td>{{ $booking->status == 1 ? 'Chờ xác nhận' : 'Đã xác nhận' }}</td>
                                                         @switch($booking->status)
                                                             @case(1)
                                                                 <td>Chờ xác nhận</td>
@@ -254,6 +253,7 @@
     <script>
         $(function() {
             $("#example1").DataTable({
+                "order": [[ 0, "desc" ]],
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,

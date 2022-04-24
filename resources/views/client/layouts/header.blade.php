@@ -19,9 +19,9 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6">
                         <div class="contact_info_wrapper">
                             <ul>
-                                <li><a href="#"><i class="fa fa-envelope"></i> hello@example.com</a></li>
+                                <li><a href="mailto:caominhduc1999@gmail.com"><i class="fa fa-envelope"></i> bookingtour@gmail.com</a></li>
                                 <li class="contact_number_wrapper hidden-xs"><a href="#"><i class="fa fa-phone"></i>
-                                        +1 814 251 152</a></li>
+                                        +84 98 600 5759</a></li>
                             </ul>
                         </div>
                     </div>

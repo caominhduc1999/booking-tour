@@ -70,6 +70,7 @@ class TourRepository extends RepositoryAbstract implements TourRepositoryInterfa
             ->when(isset($conditions['baby_price_to']), function ($q) use ($conditions) {
                 $q->where('baby_price', '<=', $conditions['baby_price_to']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 

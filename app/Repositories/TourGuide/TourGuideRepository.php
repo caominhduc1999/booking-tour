@@ -21,6 +21,7 @@ class TourGuideRepository extends RepositoryAbstract implements TourGuideReposit
             ->when(isset($conditions['phone']), function ($q) use ($conditions) {
                 $q->where('phone',  $conditions['phone']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }

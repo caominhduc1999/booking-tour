@@ -27,6 +27,7 @@ class UserRepository extends RepositoryAbstract implements UserRepositoryInterfa
             ->when(isset($conditions['role']), function ($q) use ($conditions) {
                 $q->where('role', $conditions['role']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }

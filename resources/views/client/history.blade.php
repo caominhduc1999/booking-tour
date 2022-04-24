@@ -1,4 +1,7 @@
 @extends('client.layouts.master')
+@section('title')
+    Lịch sử đặt tour
+@endsection
 @section('stylesheets')
     <!-- Style Css -->
     <link href="{{ asset('assets/client/css/shop.css') }}" rel="stylesheet">

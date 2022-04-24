@@ -1,4 +1,7 @@
 @extends('client.layouts.master')
+@section('title')
+    {{ $tour->name }} 
+@endsection
 @section('stylesheets')
         <!-- Style Css -->
         <link href="{{ asset('assets/client/css/blog_single_3.css') }}" rel="stylesheet">
@@ -165,7 +168,7 @@
                             </div>
                             <br>
                             <!-- /.entry-content -->
-                            <div class="entry-content row" style="margin-top: 20px; background-color: yellow; padding: 5px;">
+                            <div class="entry-content row" style="margin-top: 20px; background-color: #ffc3a0; padding: 5px;">
                                 <h1>Danh sách khách sạn liên kết:</h1>
                                 <br>
                                 @foreach($tour->hotels as $hotel)

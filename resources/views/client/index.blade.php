@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
-
+@section('title')
+    Trang chủ
+@endsection
 @section('content')
     <!-- slider section Start -->
     <div class="slider_main_wrapper">
@@ -174,20 +176,20 @@
                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                     <div class="team_members_slider">
                         <div class="owl-carousel owl-theme">
-                            @for($i = 0; $i <= 6; $i++)
-                            <div class="item">
-                                <div class="team_slider_wrapper">
-                                    <div class="team_members_slider_image">
-                                        <img src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" class="img-responsive"
-                                            alt="team19_img" style="height: 100px" />
-                                    </div>
-                                    <div class="team_members_slider_content">
-                                        <h4><a href="#">Jhon Parker</a></h4>
-                                        <p>People who already have strong trust relships.</p>
+                            @foreach($reviews as $review)
+                                <div class="item">
+                                    <div class="team_slider_wrapper">
+                                        <div class="team_members_slider_image">
+                                            <img src="https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" class="img-responsive"
+                                                alt="team19_img" style="height: 100px" />
+                                        </div>
+                                        <div class="team_members_slider_content">
+                                            <h4><a href="#">{{ $review->user->name }}</a></h4>
+                                            <p>{{ $review->description }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            @endfor
+                            @endforeach
                         </div>
                     </div>
                 </div>

@@ -21,6 +21,7 @@ class HotelRepository extends RepositoryAbstract implements HotelRepositoryInter
             ->when(isset($conditions['hotline']), function ($q) use ($conditions) {
                 $q->where('hotline',  $conditions['hotline']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }

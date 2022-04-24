@@ -10,6 +10,7 @@ use App\Mail\BookingInformation;
 use App\Models\Booking;
 use App\Models\Review;
 use App\Models\Tour;
+use App\Models\Transition;
 use App\Services\ArticleService;
 use App\Services\BookingService;
 use App\Services\CategoryService;
@@ -61,8 +62,9 @@ class HomeController extends Controller
     {
         $tours = $this->tourService->getFeatureTours();
         $articles = $this->articleService->getLatestArticlesByLimit(2);
+        $reviews = Review::take(4)->get();
 
-        return view('client.index', compact('tours', 'articles'));
+        return view('client.index', compact('tours', 'articles', 'reviews'));
     }
 
     public function tourList(Request $request)
@@ -206,10 +208,17 @@ class HomeController extends Controller
         {
             $bookingData['payment_status'] = 3;
             $bookingData['payment'] = 3;
-            $this->bookingService->store($bookingData);
+            $newBooking = $this->bookingService->store($bookingData);
             $paymentMethod = 'Momo';
             $email = $request->booking_person_email;
             Mail::to($email)->send(new BookingInformation($bookingData));
+
+            Transition::create([
+                'booking_id' => $newBooking->id,
+                'transaction_code' => $request->transId,
+                'amount' => $request->amount,
+                'payment_method' => 3
+            ]);
 
             return view('client.complete_booking', compact('email', 'paymentMethod'));
         } 
@@ -218,22 +227,38 @@ class HomeController extends Controller
             $vnpayBookingData['payment_status'] = 3;
             $vnpayBookingData['payment'] = 4;
 
-            $this->bookingService->store($vnpayBookingData);
+            $newBooking = $this->bookingService->store($vnpayBookingData);
             $paymentMethod = 'Vnpay';
             $email = $vnpayBookingData['booking_person_email'];
             Session::forget('vnpayBookingData');
             Mail::to($email)->send(new BookingInformation($vnpayBookingData));
+
+            Transition::create([
+                'booking_id' => $newBooking->id,
+                'transaction_code' => $request->vnp_TransactionNo,
+                'amount' => (int) $request->vnp_Amount / 100,
+                'payment_method' => 4
+            ]);
 
             return view('client.complete_booking', compact('email', 'paymentMethod'));
         }
         elseif(isset($request->PayerID)) {  // paypal
             $bookingData['payment_status'] = 3;
             $bookingData['payment'] = 2;
-            $this->bookingService->store($bookingData);
+            $newBooking = $this->bookingService->store($bookingData);
+
             $paymentMethod = 'Paypal';
             $email = $request->booking_person_email;
             $email = $request->booking_person_email;
+            
             Mail::to($email)->send(new BookingInformation($bookingData));
+
+            Transition::create([
+                'booking_id' => $newBooking->id,
+                'transaction_code' => $request->PayerID,
+                'amount' => $request->booking_price,
+                'payment_method' => 2
+            ]);
 
             return view('client.complete_booking', compact('email', 'paymentMethod'));
         }

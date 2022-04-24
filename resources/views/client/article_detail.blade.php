@@ -1,4 +1,7 @@
 @extends('client.layouts.master')
+@section('title')
+    {{ $article->title }} 
+@endsection
 @section('stylesheets')
     <!-- Style Css -->
     <link href="{{ asset('assets/client/css/blog_single_1.css') }}" rel="stylesheet">
@@ -90,7 +93,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="post-thumbnail" style="display: flex; justify-content: center;">
                                     <img src="{{ $article->image ? URL::asset('storage/images/' . $article->image) : '../../assets/images/default.jpg' }}" class="img-responsive "
-                                        alt="Image" style="width: 300px;">
+                                        alt="Image" style="width: 700px;">
                                 </div>
                                 <!-- /.post-thumbnail -->
 

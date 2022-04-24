@@ -1,4 +1,7 @@
 @extends('client.layouts.master')
+@section('title')
+    Danh sách tour
+@endsection
 @section('stylesheets')
     <!-- Style Css -->
     <link href="{{ asset('assets/client/css/blog_style_2.css') }}" rel="stylesheet">

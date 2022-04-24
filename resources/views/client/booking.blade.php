@@ -1,4 +1,7 @@
 @extends('client.layouts.master')
+@section('title')
+    Đặt tour
+@endsection
 @section('stylesheets')
     <!-- Style Css -->
     <link href="{{ asset('assets/client/css/shop.css') }}" rel="stylesheet">
@@ -75,7 +78,7 @@
                                     <br>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <b>Lịch khởi hành:</b>
+                                            <b>Lịch khởi hành gần đây:</b>
                                             <div id="validDepartureDateArray"></div>
                                         </div>
                                     </div>

@@ -12,13 +12,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Danh mục</h1>
+                    <h1>Giao dịch</h1>
                    
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                        <li class="breadcrumb-item active">Danh mục</li>
+                        <li class="breadcrumb-item active">Giao dịch</li>
                     </ol>
                 </div>
             </div>
@@ -31,19 +31,23 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Danh sách danh mục</h3>
-                            <a href="{{ route('categories.create') }}">
-                                <button class="btn btn-success float-right">
-                                    + Thêm mới
-                                </button>
-                            </a>
+                            <h3 class="card-title">Danh sách giao dịch</h3>
+                           
                             <br>
                             <br>
                             <br>
                             <form action="">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <input type="text" name="name" class="form-control" placeholder="Tên danh mục" value="{{ request()->name }}">
+                                    <div class="col-4">
+                                        <input type="text" name="transaction_code" class="form-control" placeholder="Mã giao dịch" value="{{ request()->transaction_code }}">
+                                    </div>
+                                    <div class="col-4">
+                                        <select class="form-control" name="payment_method" id="">
+                                            <option value="">Chọn phương thức thanh toán</option>
+                                            <option value="2" @if(request()->payment_method == 2) selected @endif>Paypal</option>
+                                            <option value="3" @if(request()->payment_method == 3) selected @endif>Momo</option>
+                                            <option value="4" @if(request()->payment_method == 4) selected @endif>Vnpay</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-2">
                                         <button class="btn btn-primary">
@@ -74,40 +78,58 @@
                                                     <th class="sorting" tabindex="0" aria-controls="example1"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Platform(s): activate to sort column ascending"
-                                                        style="width: 60%;">
-                                                        Tên danh mục</th>
+                                                        style="width: 20%;">
+                                                        Mã giao dịch</th>
                                                     <th class="sorting" tabindex="0" aria-controls="example1"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Action: activate to sort column ascending"
-                                                        style="width: 30%;">Thao tác
-                                                    </th>
+                                                        aria-label="Platform(s): activate to sort column ascending"
+                                                        style="width: 30%;">
+                                                        Tên khách hàng</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="example1"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Platform(s): activate to sort column ascending"
+                                                        style="width: 10%;">
+                                                        SĐT khách hàng</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="example1"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Platform(s): activate to sort column ascending"
+                                                        style="width: 20%;">
+                                                        Số tiền</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="example1"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Platform(s): activate to sort column ascending"
+                                                        style="width: 10%;">
+                                                        Phương thức thanh toán</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($categories as $key => $category)
+                                                @foreach ($transitions as $key => $transition)
                                                     <tr class="{{ $key % 2 == 0 ? 'odd' : 'even' }}">
-                                                        <td class="dtr-control sorting_1" tabindex="0">{{ $category->id }}
+                                                        <td class="dtr-control sorting_1" tabindex="0">{{ $transition->id }}
                                                         </td>
-                                                        <td>{{ $category->name }}</td>
-                                                        <td class="d-flex">
-                                                            <a href="{{ route('categories.edit', $category->id) }}"
-                                                                class="mr-2">
-                                                                <button class="btn btn-outline-warning">Sửa</button>
-                                                            </a>
-                                                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
-                                                                @method('DELETE')
-                                                                @csrf
-                                                                <button class="btn btn-outline-danger"
-                                                                    onclick="return confirm('Xác nhận xóa ?')">Xóa
-                                                                </button>
-                                                            </form>
-                                                        </td>
+                                                        <td>{{ $transition->transaction_code }}</td>
+                                                        <td>{{ \App\Models\Booking::find($transition->booking_id)->booking_person_name }}</td>
+                                                        <td>{{ \App\Models\Booking::find($transition->booking_id)->booking_person_phone }}</td>
+                                                        <td>{{ $transition->amount }}</td>
+                                                        @switch($transition->payment_method)
+                                                            @case(2)
+                                                                <td>Paypal</td>
+                                                                @break
+                                                            @case(3)
+                                                                <td>Momo</td>
+                                                                @break
+                                                            @case(4)
+                                                                <td>Vnpay</td>
+                                                                @break
+                                                            @default
+                                                                <span></span>
+                                                        @endswitch
                                                     </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
                                         <div class="d-flex justify-content-end">
-                                            {{ $categories->links() }}
+                                            {{ $transitions->links() }}
                                         </div>
                                     </div>
 

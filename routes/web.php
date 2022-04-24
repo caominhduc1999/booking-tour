@@ -15,6 +15,7 @@ use App\Http\Controllers\TourGuideController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TransitionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -86,6 +87,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin_middleware'], function
     Route::resource('/discounts', DiscountController::class);
     Route::resource('/bookings', BookingController::class);
     Route::resource('/reviews', ReviewController::class);
+    Route::resource('/transitions', TransitionController::class);
 });
 
 Route::post('/upload', [PostTasksController::class, 'upload']);

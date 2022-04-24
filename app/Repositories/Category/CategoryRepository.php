@@ -18,6 +18,7 @@ class CategoryRepository extends RepositoryAbstract implements CategoryRepositor
             ->when(isset($conditions['name']), function ($q) use ($conditions) {
                 $q->where('name', 'like', '%' . $conditions['name'] . '%');
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }

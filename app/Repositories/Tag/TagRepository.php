@@ -18,6 +18,7 @@ class TagRepository extends RepositoryAbstract implements TagRepositoryInterface
             ->when($conditions['name'], function ($q) use ($conditions) {
                 $q->where('name', 'like', '%' . $conditions['name'] . '%');
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }

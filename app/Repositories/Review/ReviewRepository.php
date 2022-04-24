@@ -21,6 +21,7 @@ class ReviewRepository extends RepositoryAbstract implements ReviewRepositoryInt
             ->when(isset($conditions['stars']), function ($q) use ($conditions) {
                 $q->where('stars', $conditions['stars']);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }
