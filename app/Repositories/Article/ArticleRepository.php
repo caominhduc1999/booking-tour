@@ -24,6 +24,7 @@ class ArticleRepository extends RepositoryAbstract implements ArticleRepositoryI
             ->when(isset($conditions['title']), function ($q) use ($conditions) {
                 $q->where('title', 'like', '%' . $conditions['title'] . '%');
             })
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 
@@ -34,19 +35,19 @@ class ArticleRepository extends RepositoryAbstract implements ArticleRepositoryI
 
     public function getPaginate($perPage)
     {
-        return $this->model->paginate($perPage);
+        return $this->model->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
     public function getByCategoryId($id, $perPage)
     {
-        return $this->model->where('category_id', $id)->paginate($perPage);
+        return $this->model->where('category_id', $id)->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
     public function getByTagId($id, $perPage)
     {
         return $this->model->whereHas('tags', function($q) use ($id) {
             return $q->where('tags.id', $id);
-        })->paginate($perPage);
+        })->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
     public function search($search, $perPage)
@@ -54,6 +55,7 @@ class ArticleRepository extends RepositoryAbstract implements ArticleRepositoryI
         return $this->model
             ->where('title', 'like', '%' . $search . '%')
             ->orWhere('overall', 'like', '%' . $search . '%')
+            ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 }
