@@ -69,21 +69,10 @@ Author: Webstrot
                         <!-- login_wrapper -->
                         <form class="login_wrapper" action="{{ route('client_post_login') }}" method="POST">
                             @csrf
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
-                                    <a href="#" class="btn btn-primary"> <span>Login with Facebook</span> <i
-                                            class="fa fa-facebook"></i> </a>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
-                                    <a href="#" class="btn btn-primary google-plus"> Login with Google <i
-                                            class="fa fa-google-plus"></i> </a>
-                                </div>
-                            </div>
-                            <h2>or</h2>
                             <div class="formsix-pos">
                                 <div class="form-group i-email">
                                     <input type="email" name="email" class="form-control" required="" id="email2"
-                                        placeholder="Email Address *">
+                                        placeholder="Email *">
                                 </div>
                             </div>
                             <div class="formsix-e">

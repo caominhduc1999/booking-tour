@@ -114,7 +114,7 @@ Author: Webstrot
                             <div class="formsix-pos">
                                 <div class="form-group">
                                     <input type="email" name="email" class="form-control" required="" id="email2"
-                                        placeholder="Email Address *" value="{{ old('email') }}">
+                                        placeholder="Email *" value="{{ old('email') }}">
                                 </div>
                             </div>
                             @error('email')
