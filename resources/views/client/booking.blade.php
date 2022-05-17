@@ -436,7 +436,7 @@
 
                 let tourDays = '{{ $tour->days }}'
                 let tourNights = '{{ $tour->nights }}'
-                var originalTotalPriceAfterDiscount = parseInt($('.total-price-after-discount').text().slice(0, -4).replace(',', ''))
+                var originalTotalPriceAfterDiscount = parseInt($('.total-price-after-discount').text().slice(0, -4).replace(',', '').replace(',', ''))
                 if (hotelData != undefined) {
                     let hotelPrice = hotelData.price_per_day * tourDays + hotelData.price_per_night * tourNights
                     $('.hotel-price').text(hotelPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' VNĐ')

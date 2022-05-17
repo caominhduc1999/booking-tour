@@ -4,13 +4,13 @@
 <p>SĐT người đặt: {{ $data['booking_person_phone'] }}</p>
 <p>Email người đặt: {{ $data['booking_person_email'] }}</p>
 <p>Địa chỉ người đặt: {{ $data['booking_person_address'] }}</p>
-<p>Ngày đặt: {{ \Carbon\Carbon::parse($data['start_date'])->format('d-m-Y') }}</p>
+<p>Ngày đặt: {{ $data['start_date'] }}</p>
 <p>Số lượng người lớn: {{ $data['adult_number'] }}</p>
 <p>Số lượng trẻ em: {{ $data['children_number'] }}</p>
 <p>Số lượng trẻ nhỏ: {{ $data['baby_number'] }}</p>
 <p>Ghi chú: {!! $data['note'] !!}</p>
-<p>Tổng tiền: {{ number_format($data['total_price'], 2) . $data['payment'] == 2 ? ' USD' : ' VNĐ' }}</p>
-<p>Phương thức thanh toán: 
+<p>Tổng tiền: {{ number_format($data['total_price'], 2) . ($data['payment'] == 2 ? ' USD' : ' VNĐ') }}</p>
+<p>Phương thức thanh toán:
     @switch($data['payment'])
         @case(1)
             <span>Thanh toán tại quầy</span>
@@ -28,7 +28,7 @@
             <span></span>
     @endswitch
 </p>
-<p>Trạng thái thanh toán: 
+<p>Trạng thái thanh toán:
     @switch($data['payment_status'])
         @case(1)
             <span>Chưa thanh toán</span>
