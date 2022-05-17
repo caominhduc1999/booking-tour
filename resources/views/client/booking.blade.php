@@ -97,7 +97,7 @@
                                     @error('start_date')
                                         <div class="text-danger">
                                             {{ $message }}
-                                        </div>    
+                                        </div>
                                     @enderror
                                 </div>
                                 <br>
@@ -108,7 +108,7 @@
                                         @error('adult_number')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                     <div class="col-md-4">
@@ -118,7 +118,7 @@
                                         @error('children_number')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                     <div class="col-md-4">
@@ -127,14 +127,14 @@
                                         @error('baby_number')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                     <div style="margin-left: 15px;">
                                         @error('people_limit')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@
                                         @error('booking_person_name')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -158,7 +158,7 @@
                                         @error('booking_person_phone')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -170,7 +170,7 @@
                                         @error('booking_person_address')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@
                                         @error('booking_person_email')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -199,7 +199,7 @@
                                         @error('hotel_id')
                                             <div class="text-danger">
                                                 {{ $message }}
-                                            </div>    
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -226,7 +226,7 @@
                                 </div>
                                 <br>
                                 <div style="margin-top: 40px;" id="discount-notify">
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -251,7 +251,7 @@
                                                 <span style="font-size: 12px; color: blue;">(Không bao gồm phí khách sạn)</span>
                                             </th>
                                             <td><span class="price discount-price">0 VNĐ</span></td>
-                                            
+
                                             <input type="hidden" id="discount-price-input" name="discount_price" value="0">
                                         </tr>
                                         <tr>
@@ -296,7 +296,7 @@
         let departureDateArray = departureDate.split(',')
         let validDepartureDateArray = [];
         let htmlDepartureDateArray = [];
-        
+
         departureDateArray.forEach(function(item) {
             let selectItemDate = item.split('/')
             let formatItemDate = `${selectItemDate[1]}/${selectItemDate[0]}/${selectItemDate[2]}`
@@ -392,17 +392,17 @@
                 let currency = totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 $('.total-price').text(currency + ' VNĐ')
                 $('#total-price-input').val(totalPrice)
-            } 
+            }
 
             function calculateTotalPriceAfterDiscount(discountRate) {
                 if (discountRate != null) {
-                    let totalPriceAfterDiscount = parseInt($('.total-price').text().slice(0, -4).replace(',', '')) * (1 - discountRate)
+                    let totalPriceAfterDiscount = parseInt($('.total-price').text().slice(0, -4).replace(',', '').replace(',', '')) * (1 - discountRate)
 
                     $('.total-price-after-discount').text(totalPriceAfterDiscount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' VNĐ')
                     $('#whole-price-input').val(totalPriceAfterDiscount)
                     $('#booking-price').val(totalPriceAfterDiscount)    // form
                 } else {
-                    let totalPriceAfterDiscount = parseInt($('.total-price').text().slice(0, -4).replace(',', ''))
+                    let totalPriceAfterDiscount = parseInt($('.total-price').text().slice(0, -4).replace(',', '').replace(',', ''))
                     $('.total-price-after-discount').text(totalPriceAfterDiscount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' VNĐ')
                     $('#whole-price-input').val(totalPriceAfterDiscount)
                     $('#booking-price').val(totalPriceAfterDiscount)     // form
@@ -412,7 +412,7 @@
             function calculateDiscountPrice(discountRate)
             {
                 if (discountRate != null) {
-                    let totalPrice = parseInt($('.total-price').text().slice(0, -4).replace(',', ''))
+                    let totalPrice = parseInt($('.total-price').text().slice(0, -4).replace(',', '').replace(',', ''))
                     let discountRateValue = (discountRate) * totalPrice
                     $('.discount-price').text('- ' + discountRateValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' VNĐ')
                     $('#discount-price-input').val(discountRateValue)
